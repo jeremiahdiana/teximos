@@ -14,8 +14,8 @@ export const SITE_BLURB =
 export const AUTHOR = {
   name: "Jeremiah Diana",
   // Used for the Person schema on /about. Empty entries are dropped.
+  // Deliberately no product links here. This is not a funnel.
   links: [
-    { label: "MODUS", href: "https://moduspilot.com" },
     { label: "GitHub", href: "https://github.com/joinFITR/teximos" },
     { label: "LinkedIn", href: "" },
   ],
