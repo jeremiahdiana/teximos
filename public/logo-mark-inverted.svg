@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- White on black reversed, for use on dark profile pages and dark decks. -->
+  <rect width="512" height="512" rx="112" fill="#fcfcfb"/>
+  <g transform="translate(-8 0)">
+    <path d="M228 118 L284 118 L284 300 C284 332 316 352 358 352 L358 400 L294 400 C252 400 228 372 228 332 Z" fill="#0d0d0f"/>
+    <path d="M152 178 L358 178 L358 234 L152 234 Z" fill="#0d0d0f"/>
+  </g>
+</svg>

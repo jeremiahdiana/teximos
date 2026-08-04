@@ -1,0 +1,62 @@
+---
+import Base from "../layouts/Base.astro";
+import { AUTHOR, SITE_URL, SITE_TITLE } from "../consts";
+
+const links = AUTHOR.links.filter((l) => l.href);
+
+// Person schema with sameAs is the machine readable way to tell a search
+// engine that these accounts are one person. Empty links are dropped, so
+// filling them in later in consts.ts is all that is needed.
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: AUTHOR.name,
+  url: SITE_URL,
+  sameAs: links.map((l) => l.href),
+};
+---
+
+<Base
+  title="About"
+  description={`${AUTHOR.name} writes ${SITE_TITLE}, a record of things that broke while building software.`}
+>
+  <div class="about">
+    <h1>About</h1>
+    <div class="prose">
+      <p>
+        I am {AUTHOR.name}. I build <a href="https://moduspilot.com">MODUS</a>,
+        a multi model answer engine, and I run a small agency.
+      </p>
+      <p>
+        This site is a record of things that broke. Billing meters that
+        counted the wrong units. A database transaction that protected the
+        write but not the decision in front of it. A model constraint that
+        turned out to be keyed on spelling. I write them up because the
+        writeups I needed at the time mostly did not exist.
+      </p>
+      <p>
+        Everything here is a real incident from production, with the real
+        numbers attached. No tutorials.
+      </p>
+    </div>
+
+    {
+      links.length > 0 && (
+        <ul class="profiles">
+          {links.map((l) => (
+            <li>
+              <span class="k">{l.label}</span>
+              <a href={l.href}>{l.href.replace(/^https?:\/\//, "")}</a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </div>
+
+  <script
+    type="application/ld+json"
+    is:inline
+    set:html={JSON.stringify(schema)}
+  />
+</Base>

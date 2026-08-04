@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!--
+    The letter is cut out rather than painted, so it picks up whatever the
+    browser puts behind it. The square flips on scheme so it never disappears
+    into a dark tab bar.
+  -->
+  <style>
+    .sq { fill: #0d0d0f; }
+    @media (prefers-color-scheme: dark) { .sq { fill: #e8e8ea; } }
+  </style>
+  <mask id="t">
+    <rect width="512" height="512" rx="112" fill="#fff"/>
+    <g transform="translate(-8 0)">
+      <path d="M228 118 L284 118 L284 300 C284 332 316 352 358 352 L358 400 L294 400 C252 400 228 372 228 332 Z" fill="#000"/>
+      <path d="M152 178 L358 178 L358 234 L152 234 Z" fill="#000"/>
+    </g>
+  </mask>
+  <rect class="sq" width="512" height="512" rx="112" mask="url(#t)"/>
+</svg>

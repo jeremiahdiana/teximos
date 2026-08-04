@@ -1,0 +1,19 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "teximos",
+  "compatibility_date": "2026-08-04",
+
+  // Attaching the apex domain. custom_domain tells Cloudflare to create the DNS
+  // record and issue the certificate itself, so nothing has to be added by hand
+  // in the dashboard. The zone already exists because the domain was registered
+  // in this same account.
+  "routes": [{ "pattern": "teximos.com", "custom_domain": true }],
+
+  // Assets only. There is no Worker script, because the site is fully static
+  // and every page is prerendered at build time.
+  "assets": {
+    "directory": "./dist",
+    // Serves the built 404.astro instead of a bare Cloudflare error page.
+    "not_found_handling": "404-page"
+  }
+}

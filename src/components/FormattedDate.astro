@@ -1,0 +1,21 @@
+---
+interface Props {
+  date: Date;
+  style?: "long" | "short";
+}
+
+const { date, style = "long" } = Astro.props;
+
+const iso = date.toISOString().slice(0, 10);
+const label =
+  style === "short"
+    ? iso.replace(/-/g, ".")
+    : date.toLocaleDateString("en-GB", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        timeZone: "UTC",
+      });
+---
+
+<time datetime={iso}>{label}</time>

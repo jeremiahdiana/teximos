@@ -1,0 +1,46 @@
+---
+// The mark: a lowercase t knocked out of a rounded square.
+// Drawn by hand on a 512 canvas, not traced from a typeface.
+// The letter is transparent while the square takes currentColor, so the
+// mark inverts with the theme without needing a second asset.
+interface Props {
+  size?: number;
+  title?: string;
+}
+
+const { size = 24, title = "teximos" } = Astro.props;
+
+// Unique per instance so two marks on one page cannot collide.
+const maskId = `tex-mark-${Math.random().toString(36).slice(2, 9)}`;
+
+// Variant G. Stem 56, medium ascender, hooked foot with a vertical terminal.
+// The hook terminal and the crossbar both end on x=358. They were 8 units
+// apart in the first cut, which read as a mistake rather than a decision.
+//
+// The whole letter is then nudged 8 units left. Geometric centre puts the ink
+// midpoint at 255 against a canvas centre of 256, so it is centred on paper and
+// still looks pushed right, because the hook loads the lower right with nothing
+// balancing it on the lower left. Optical centring beats measured centring here.
+const STEM =
+  "M228 118 L284 118 L284 300 C284 332 316 352 358 352 L358 400 L294 400 C252 400 228 372 228 332 Z";
+const BAR = "M152 178 L358 178 L358 234 L152 234 Z";
+---
+
+<svg
+  width={size}
+  height={size}
+  viewBox="0 0 512 512"
+  fill="currentColor"
+  role="img"
+  aria-label={title}
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <mask id={maskId}>
+    <rect width="512" height="512" rx="112" fill="#fff" />
+    <g transform="translate(-8 0)">
+      <path d={STEM} fill="#000" />
+      <path d={BAR} fill="#000" />
+    </g>
+  </mask>
+  <rect width="512" height="512" rx="112" mask={`url(#${maskId})`} />
+</svg>
