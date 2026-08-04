@@ -104,8 +104,13 @@ const right = thumb ? 380 : 1012;
           HTTP 200
         </text>
 
+        {/*
+          Short on purpose. At 15px with 0.11em tracking a caption runs about
+          10.6 units per character, and this one starts at 300 while the next
+          starts at 516. "REASONING, NEVER SENT" measured 224 and overlapped it.
+        */}
         <text class="dg-cap" x="300" y="240">
-          REASONING, NEVER SENT
+          REASONING, ABSENT
         </text>
         <text class="dg-cap dg-on" x="516" y="240">
           REASONING-SIGNATURE

@@ -10,7 +10,8 @@
     "check:copy": "node scripts/check-copy.mjs",
     "build": "npm run check:copy && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "og": "node scripts/og.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^7.0.5",

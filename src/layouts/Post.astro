@@ -10,13 +10,21 @@ interface Props {
   date: Date;
   topic: string;
   diagram?: string;
+  /** Collection id, which is also the slug the social card is filed under. */
+  slug: string;
 }
 
-const { title, description, date, topic, diagram } = Astro.props;
+const { title, description, date, topic, diagram, slug } = Astro.props;
 const Hero = getDiagram(diagram) as any;
 ---
 
-<Base title={title} description={description} bare>
+<Base
+  title={title}
+  description={description}
+  bare
+  type="article"
+  image={`/og/${slug}.png`}
+>
   <article>
     {
       Hero && (

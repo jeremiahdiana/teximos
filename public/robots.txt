@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://teximos.com/sitemap-index.xml
