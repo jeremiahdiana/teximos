@@ -11,10 +11,14 @@ export async function GET(context) {
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
     site: context.site,
+    // Renders the feed as a readable page when a human opens it in a browser.
+    // Feed readers ignore it.
+    stylesheet: "/rss.xsl",
     items: posts.map((post) => ({
       title: post.data.title,
       description: post.data.description,
       pubDate: post.data.date,
+      categories: [post.data.topic],
       link: `/blog/${post.id}/`,
     })),
   });

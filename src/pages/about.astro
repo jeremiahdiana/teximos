@@ -1,57 +1,78 @@
 ---
 import Base from "../layouts/Base.astro";
-import { AUTHOR, SITE_URL, SITE_TITLE } from "../consts";
+import { AUTHOR, SITE_URL, SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 
 const links = AUTHOR.links.filter((l) => l.href);
 
-// Person schema with sameAs is the machine readable way to tell a search
-// engine that these accounts are one person. Empty links are dropped, so
-// filling them in later in consts.ts is all that is needed.
+// Periodical describes the publication. Person, linked as its author, is what
+// ties the accounts together for a search engine without making the site
+// itself read as a personal page.
 const schema = {
   "@context": "https://schema.org",
-  "@type": "Person",
-  name: AUTHOR.name,
+  "@type": "Periodical",
+  name: SITE_TITLE,
   url: SITE_URL,
-  sameAs: links.map((l) => l.href),
+  description: SITE_DESCRIPTION,
+  author: {
+    "@type": "Person",
+    name: AUTHOR.name,
+    sameAs: links.map((l) => l.href),
+  },
 };
 ---
 
-<Base
-  title="About"
-  description={`${AUTHOR.name} writes ${SITE_TITLE}, a record of things that broke while building software.`}
->
-  <div class="about">
-    <h1>About</h1>
-    <div class="prose">
-      <p>
-        I am {AUTHOR.name}. I build <a href="https://moduspilot.com">MODUS</a>,
-        a multi model answer engine, and I run a small agency.
-      </p>
-      <p>
-        This site is a record of things that broke. Billing meters that
-        counted the wrong units. A database transaction that protected the
-        write but not the decision in front of it. A model constraint that
-        turned out to be keyed on spelling. I write them up because the
-        writeups I needed at the time mostly did not exist.
-      </p>
-      <p>
-        Everything here is a real incident from production, with the real
-        numbers attached. No tutorials.
-      </p>
-    </div>
+<Base title="About" description={SITE_DESCRIPTION}>
+  <div class="page">
+    <div class="shell">
+      <span class="kicker">About</span>
+      <h1>What this is</h1>
 
-    {
-      links.length > 0 && (
-        <ul class="profiles">
-          {links.map((l) => (
-            <li>
-              <span class="k">{l.label}</span>
-              <a href={l.href}>{l.href.replace(/^https?:\/\//, "")}</a>
-            </li>
-          ))}
-        </ul>
-      )
-    }
+      <div class="prose column">
+        <p>
+          Teximos publishes writeups of production failures in working
+          software. One incident per piece, with the real numbers, the code
+          that caused it and what the fix actually changed.
+        </p>
+        <p>
+          The bias is toward the failures that look boring and are not. A
+          pricing table with two rows missing. A guard pointed at the wrong
+          set. A transaction that protected the write and not the decision in
+          front of it. These are rarely written about, because they are
+          embarrassing and because they are specific, and the specifics are
+          exactly what makes them useful.
+        </p>
+        <p>
+          Nothing here is a tutorial, a framework comparison or a list. If a
+          piece cannot name what broke and show the measurement, it does not
+          get published.
+        </p>
+
+        <h2>Who writes it</h2>
+        <p>
+          {AUTHOR.name}, currently building
+          <a href="https://moduspilot.com">MODUS</a>. Most of the incidents so
+          far are ones caused and then fixed there, which is the only reason
+          the numbers can be published in full.
+        </p>
+        <p>
+          Corrections are welcome. If something here is wrong, it is worth
+          fixing in place rather than leaving.
+        </p>
+      </div>
+
+      {
+        links.length > 0 && (
+          <ul class="profiles">
+            {links.map((l) => (
+              <li>
+                <span class="k">{l.label}</span>
+                <a href={l.href}>{l.href.replace(/^https?:\/\//, "")}</a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
   </div>
 
   <script

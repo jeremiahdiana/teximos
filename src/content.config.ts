@@ -7,6 +7,8 @@ const blog = defineCollection({
     title: z.string(),
     description: z.string(),
     date: z.coerce.date(),
+    // The kicker above each headline. Names the subject, not the author.
+    topic: z.string().default("Engineering"),
     draft: z.boolean().default(false),
   }),
 });

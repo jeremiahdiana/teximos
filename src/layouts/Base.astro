@@ -41,36 +41,95 @@ const year = new Date().getFullYear();
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta name="twitter:card" content="summary" />
+
+    {/*
+      Blocking on purpose. It has to set the attribute before the first paint,
+      otherwise a reader who picked dark gets a white flash on every load.
+    */}
+    <script is:inline>
+      (function () {
+        try {
+          var t = localStorage.getItem("theme");
+          if (t === "light" || t === "dark")
+            document.documentElement.setAttribute("data-theme", t);
+        } catch (e) {}
+      })();
+    </script>
+    <noscript><style>.themetoggle { display: none; }</style></noscript>
   </head>
 
   <body>
     <header class="site-header">
-      <div class="wrap">
+      <div class="shell">
         <div class="bar">
           <a class="wordmark" href="/">
-            <Logo size={23} />
+            <Logo size={22} />
             <span>teximos</span>
           </a>
           <nav>
-            <a href="/about">about</a>
-            <a href="/rss.xml">rss</a>
+            <a href="/about">About</a>
+            <a href="/rss.xml">RSS</a>
+            <button
+              class="themetoggle"
+              id="theme-toggle"
+              type="button"
+              aria-live="polite">System</button
+            >
           </nav>
         </div>
       </div>
     </header>
 
+    {/* Sits here rather than at the end of body so the label is correct
+        before the header is ever painted. */}
+    <script is:inline>
+      (function () {
+        var btn = document.getElementById("theme-toggle");
+        if (!btn) return;
+        var order = ["system", "light", "dark"];
+        var label = { system: "System", light: "Light", dark: "Dark" };
+
+        function current() {
+          var t = null;
+          try {
+            t = localStorage.getItem("theme");
+          } catch (e) {}
+          return t === "light" || t === "dark" ? t : "system";
+        }
+
+        function paint() {
+          var c = current();
+          btn.textContent = label[c];
+          btn.setAttribute("aria-label", "Colour theme: " + label[c]);
+        }
+
+        btn.addEventListener("click", function () {
+          var next = order[(order.indexOf(current()) + 1) % order.length];
+          try {
+            if (next === "system") localStorage.removeItem("theme");
+            else localStorage.setItem("theme", next);
+          } catch (e) {}
+          if (next === "system")
+            document.documentElement.removeAttribute("data-theme");
+          else document.documentElement.setAttribute("data-theme", next);
+          paint();
+        });
+
+        paint();
+      })();
+    </script>
+
     <main>
-      <div class="wrap">
-        <slot />
-      </div>
+      <slot />
     </main>
 
     <footer class="site-footer">
-      <div class="wrap">
+      <div class="shell">
         <div class="bar">
-          <span>© {year} Jeremiah Diana</span>
+          <span>© {year} Teximos</span>
           <span class="spacer"></span>
-          <a href="/rss.xml">rss</a>
+          <a href="/about">About</a>
+          <a href="/rss.xml">RSS</a>
         </div>
       </div>
     </footer>

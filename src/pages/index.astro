@@ -2,37 +2,96 @@
 import { getCollection } from "astro:content";
 import Base from "../layouts/Base.astro";
 import FormattedDate from "../components/FormattedDate.astro";
+import { SITE_STATEMENT, SITE_BLURB } from "../consts";
 
 const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
 );
+
+const [lead, ...rest] = posts;
 ---
 
 <Base>
-  <p class="intro">
-    Notes on shipping software, mostly the parts that went wrong. Written by
-    Jeremiah Diana while building <a href="https://moduspilot.com">MODUS</a>.
-  </p>
+  <section class="masthead">
+    <div class="shell">
+      <span class="kicker">Teximos</span>
+      <p>{SITE_STATEMENT}</p>
+      <p class="sub">{SITE_BLURB}</p>
+    </div>
+  </section>
 
   {
-    posts.length === 0 ? (
-      <p class="intro">Nothing published yet.</p>
-    ) : (
-      <ul class="postlist">
-        {posts.map((post) => (
-          <li>
-            <a class="row" href={`/blog/${post.id}/`}>
-              <span class="date">
-                <FormattedDate date={post.data.date} style="short" />
+    lead && (
+      <section class="lead-section">
+        <div class="shell">
+          <div class="lead">
+            <div>
+              <span class="kicker">{lead.data.topic}</span>
+              <a class="title" href={`/blog/${lead.id}/`}>
+                <h2>{lead.data.title}</h2>
+              </a>
+            </div>
+            <div class="aside">
+              <p>{lead.data.description}</p>
+              <span class="meta">
+                <FormattedDate date={lead.data.date} />
               </span>
-              <span>
-                <span class="title">{post.data.title}</span>
-                <span class="desc">{post.data.description}</span>
-              </span>
-            </a>
-          </li>
-        ))}
-      </ul>
+            </div>
+          </div>
+        </div>
+      </section>
     )
   }
+
+  {
+    posts.length === 0 && (
+      <div class="shell">
+        <p class="empty">Nothing published yet.</p>
+      </div>
+    )
+  }
+
+  {
+    rest.length > 0 && (
+      <section class="more">
+        <div class="shell">
+          <span class="kicker">More</span>
+          <ul class="grid">
+            {rest.map((post) => (
+              <li>
+                <a href={`/blog/${post.id}/`}>
+                  <span class="kicker">{post.data.topic}</span>
+                  <h3>{post.data.title}</h3>
+                  <p>{post.data.description}</p>
+                  <span class="meta">
+                    <FormattedDate date={post.data.date} style="short" />
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
+  <section class="colophon">
+    <div class="shell">
+      <div class="inner">
+        <div>
+          <span class="kicker">Colophon</span>
+          <p>
+            Published irregularly, when something breaks in a way worth
+            writing down. Set in Newsreader and JetBrains Mono. Built with
+            Astro and served from Cloudflare. It ships no JavaScript beyond
+            the theme switch.
+          </p>
+        </div>
+        <div class="feed">
+          <span class="kicker">Subscribe</span>
+          <a href="/rss.xml">teximos.com/rss.xml</a>
+        </div>
+      </div>
+    </div>
+  </section>
 </Base>

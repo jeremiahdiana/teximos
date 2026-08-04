@@ -2,6 +2,7 @@
 title: "A missing price billed every image at 27x"
 description: "The cheapest model we served was absent from the pricing table, so it fell through to the fallback weight. Every image request in production landed on it."
 date: 2026-08-04
+topic: Metering and billing
 ---
 
 A user asked one question about their screen. The app told them they had used
