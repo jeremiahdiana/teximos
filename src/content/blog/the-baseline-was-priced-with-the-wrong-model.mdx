@@ -1,0 +1,117 @@
+---
+title: "The baseline was priced with the wrong model"
+description: "Flash was filed with Flash-Lite's rates. Nothing errored, because the number was plausible and it was the number every other price divided by."
+date: 2026-08-04
+topic: "Metering and billing"
+diagram: WrongBaseline
+---
+
+import Pull from "../../components/Pull.astro";
+
+There is a class of bug that never throws, never appears in a log and never
+gets reported by a user, because the system is working exactly as written. The
+only thing wrong is a number, and the number looks reasonable.
+
+A pricing table had `gemini-3.5-flash` at $0.30 in and $2.50 out per million
+tokens. Those are real published rates. They are just Flash-Lite's rates, filed
+under Flash's id. Flash is $1.50 and $9.00.
+
+Blended against the usual input and output mix that comes to $2.25 per million,
+not $0.52. The price was understated 4.3 times.
+
+## Why one wrong row was not one wrong row
+
+Cost weights in this system are relative. Weight 1 is defined as the price of a
+reference model and everything else is a multiple of it. That reference was
+`gemini-3.5-flash`.
+
+So the wrong price was not sitting in a row of its own. It was the denominator.
+Every other model's weight was a ratio against a number that was four times too
+small, which means every weight in the table was wrong in the same direction at
+once. Nothing looked inconsistent, because everything was inconsistent by the
+same factor.
+
+<Pull>
+It was not one wrong row. It was the ruler.
+</Pull>
+
+The same model was also `FREE_DEFAULT`, the model every request lands on when
+the user has not chosen one. So the mispriced model was simultaneously the
+cheapest thing in the catalog, the thing the catalog was measured against and
+the thing most traffic actually used.
+
+## The number that should have been the alarm
+
+The file carried its own worked example, written when the table was built. It
+said a PILOT subscriber's weekly budget on Flash came to about $26 a month
+against a $59 subscription. Comfortable margin. That example is the kind of
+thing you write once to sanity check a design and then never look at again.
+
+At the real price it was about $102 a month. Against a $59 subscription.
+
+The margin was not thin. It was inverted. Every heavy PILOT user was losing
+money on their own subscription, and the file that would have told you so was
+sitting in the repository the whole time with the arithmetic already written
+out.
+
+## The hedge that was actually a to-do
+
+Each entry in the table can carry a flag:
+
+```ts
+/** Published $/1M. `est: true` means no published rate was found. */
+const PRICES: Record<string, { in: number; out: number; est?: boolean }> = {
+  'gemini-3.5-flash': { in: 0.3, out: 2.5, est: true },
+};
+```
+
+`est: true` means nobody found a published rate, so the number is a guess.
+
+Flash carried that flag. Google publishes Flash's price, prominently, on the
+pricing page. The flag was not recording that the rate was unavailable. It was
+recording that nobody had gone to look.
+
+That is the part worth keeping. A field meant to say "unverified" gets read as
+"handled" the moment it has been sitting in the file for a week. It looks like
+diligence, because someone clearly thought about it enough to mark it. The mark
+is the whole problem: it converts an open question into a decoration.
+
+The file says as much now, in a comment above the row:
+
+```ts
+// est: true looked like a hedge rather than a thing to go check.
+```
+
+## Fixing it without moving anyone's allowance
+
+The obvious fix is to correct Flash's price. The trap is that correcting the
+baseline rescales every weight in the system, and every weight is what decides
+how much a paying subscriber can use in a day. Fix the bug carelessly and every
+customer silently gets a different allowance than the one they had yesterday.
+
+So the fix was two moves rather than one. Price Flash correctly, which takes it
+from weight 1 to weight 5. Then re-pin the baseline to Flash-Lite, which blends
+to $0.52, the exact number the baseline already was.
+
+The second move is the one that matters. The reference point keeps its value,
+so every other weight in the table is arithmetically unchanged. The only row
+that moves is the row that was wrong.
+
+That claim is checkable rather than asserted. The verification script prints a
+before and after weight for every model, and the diff showed exactly one row
+changed. No subscriber's allowance moved by a single unit.
+
+## What I would take from this
+
+A wrong number in a leaf row is a bug. A wrong number in a baseline is a change
+of units, and it is invisible precisely because it is applied consistently. Ratios
+all still agree with each other. The system stays internally coherent while
+being uniformly wrong, which is the hardest kind of wrong to see.
+
+The defence is not more care when writing the table. It is having something
+outside the table to check it against. The worked example was that thing, and it
+was right there, in the same file, giving the correct answer to a question
+nobody re-read.
+
+If you write a sanity check into a comment, it is worth making it a test
+instead. A comment cannot fail.

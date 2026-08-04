@@ -1,0 +1,150 @@
+---
+/**
+ * The Flash pricing error, as a figure.
+ *
+ * Two magnitudes against a threshold, so horizontal bars with a reference
+ * line. The line is the subscription price, which is the whole point: the
+ * believed cost sits comfortably under it and the real cost crosses it.
+ *
+ * The reference line is solid, not dashed. Dashing is reserved here for
+ * nothing, because a dashed rule reads as "projection" and this is a hard
+ * number a customer actually pays.
+ */
+interface Props {
+  variant?: "hero" | "thumb";
+}
+
+const { variant = "hero" } = Astro.props;
+const thumb = variant === "thumb";
+
+// dollars per month, 0 to 110 across the plot
+const MAX = 110;
+const x0 = thumb ? 20 : 300;
+const x1 = thumb ? 380 : 1012;
+const per = (x1 - x0) / MAX;
+const at = (d: number) => x0 + d * per;
+
+const H = thumb ? 44 : 56;
+const r = 4;
+
+const yBelieved = thumb ? 34 : 150;
+const yActual = thumb ? 118 : 286;
+const lineTop = thumb ? 16 : 122;
+const lineBottom = thumb ? 180 : 374;
+
+function bar(d: number, y: number) {
+  const xe = at(d);
+  const e = Math.min(r, Math.max(0, xe - x0));
+  return `M${x0} ${y} L${xe - e} ${y} Q${xe} ${y} ${xe} ${y + e} L${xe} ${y + H - e} Q${xe} ${y + H} ${xe - e} ${y + H} L${x0} ${y + H} Z`;
+}
+---
+
+<svg
+  viewBox={thumb ? "0 0 400 216" : "0 0 1200 460"}
+  role="img"
+  aria-label="Monthly cost of a PILOT budget on gemini-3.5-flash. Believed to be 26 dollars. Actually 102 dollars, against a 59 dollar subscription."
+  xmlns="http://www.w3.org/2000/svg"
+  class="dg"
+>
+  {
+    !thumb && (
+      <>
+        <text class="dg-cap" x="60" y="58">
+          A PILOT BUDGET ON GEMINI-3.5-FLASH, PER MONTH
+        </text>
+        <line class="dg-rule" x1="60" y1="80" x2="1140" y2="80" />
+      </>
+    )
+  }
+
+  <path d={bar(26, yBelieved)} fill="currentColor" opacity="0.28" />
+  <path d={bar(102, yActual)} fill="currentColor" />
+
+  {/* the subscription price, which the real cost crosses */}
+  <line
+    class="dg-thresh"
+    x1={at(59)}
+    y1={lineTop}
+    x2={at(59)}
+    y2={lineBottom}
+  />
+
+  {
+    !thumb && (
+      <>
+        <text class="dg-lbl dg-end" x="280" y="186">
+          believed
+        </text>
+        <text class="dg-lbl dg-end dg-on" x="280" y="322">
+          actual
+        </text>
+
+        <text class="dg-val" x={at(26) + 18} y="186">
+          $26
+        </text>
+        <text class="dg-val dg-on" x={at(102) + 18} y="322">
+          $102
+        </text>
+
+        <text class="dg-cap dg-on" x={at(59) + 12} y="112">
+          $59 SUBSCRIPTION
+        </text>
+
+        <line class="dg-rule" x1="60" y1="412" x2="1140" y2="412" />
+        <text class="dg-cap" x="60" y="440">
+          PRICED WITH FLASH-LITE'S RATES, FILED UNDER FLASH'S ID
+        </text>
+      </>
+    )
+  }
+</svg>
+
+<style>
+  .dg {
+    display: block;
+    width: 100%;
+    height: auto;
+    color: var(--fg);
+  }
+
+  .dg text {
+    font-family: var(--mono);
+    fill: currentColor;
+  }
+
+  .dg-cap {
+    font-size: 15px;
+    letter-spacing: 0.11em;
+    opacity: 0.5;
+  }
+
+  .dg-lbl {
+    font-size: 21px;
+    opacity: 0.5;
+  }
+
+  .dg-val {
+    font-size: 18px;
+    opacity: 0.5;
+  }
+
+  .dg-on {
+    opacity: 1;
+  }
+
+  .dg-end {
+    text-anchor: end;
+  }
+
+  .dg-rule {
+    stroke: currentColor;
+    stroke-width: 1;
+    opacity: 0.18;
+  }
+
+  .dg-thresh {
+    stroke: currentColor;
+    stroke-width: 2;
+    opacity: 0.9;
+  }
+</style>

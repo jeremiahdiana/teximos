@@ -1,4 +1,5 @@
 import MissingPrice from "./MissingPrice.astro";
+import WrongBaseline from "./WrongBaseline.astro";
 
 /**
  * Frontmatter `diagram` selects from this map. An unknown or absent name
@@ -7,6 +8,7 @@ import MissingPrice from "./MissingPrice.astro";
  */
 export const DIAGRAMS: Record<string, unknown> = {
   MissingPrice,
+  WrongBaseline,
 };
 
 export function getDiagram(name?: string) {
