@@ -1,0 +1,34 @@
+---
+import { Image } from "astro:assets";
+
+/**
+ * A real image inside an article, with a caption.
+ *
+ * `wide` breaks it out into the rail, the same trick <Pull> uses, so a
+ * screenshot can run past the 38rem reading column without the prose moving.
+ * Use it for anything with detail in it. A portrait or a small diagram should
+ * stay inside the measure.
+ *
+ * Goes through Astro's image pipeline, so it is resized at build time and
+ * carries intrinsic dimensions. No layout shift, no JavaScript.
+ */
+interface Props {
+  src: ImageMetadata;
+  alt: string;
+  caption?: string;
+  wide?: boolean;
+}
+
+const { src, alt, caption, wide = false } = Astro.props;
+---
+
+<figure class:list={["figure", "shot", wide && "figure-wide"]}>
+  <Image
+    src={src}
+    alt={alt}
+    widths={wide ? [640, 1140, 1520] : [608, 1216]}
+    sizes={wide ? "(max-width: 46rem) 100vw, 57rem" : "(max-width: 46rem) 100vw, 38rem"}
+    loading="lazy"
+  />
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>

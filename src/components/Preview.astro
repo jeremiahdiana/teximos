@@ -1,0 +1,43 @@
+---
+import { Image } from "astro:assets";
+import { getDiagram } from "./diagrams";
+
+/**
+ * The preview artwork for one piece, on the front page.
+ *
+ * Two sources, one slot. A piece with a `cover` shows the real image. A piece
+ * with a `diagram` shows the STRIPPED figure variant, never the labelled one:
+ * the lead lands near 700px wide, where the labelled version's 15px captions
+ * would render around 9px.
+ *
+ * It exists because the same choice was being made in three places on the
+ * index, and a fourth would have got it wrong.
+ */
+interface Props {
+  post: any;
+  size: "lead" | "card";
+}
+
+const { post, size } = Astro.props;
+const lead = size === "lead";
+const cover = post.data.cover;
+const Art = getDiagram(post.data.diagram) as any;
+---
+
+{
+  cover ? (
+    <span class:list={[lead ? "plate" : "card-art", "art-photo"]}>
+      <Image
+        src={cover}
+        alt={post.data.coverAlt ?? ""}
+        widths={lead ? [760, 1520] : [400, 800]}
+        sizes={lead ? "(max-width: 62rem) 100vw, 46rem" : "(max-width: 46rem) 100vw, 22rem"}
+        loading={lead ? "eager" : "lazy"}
+      />
+    </span>
+  ) : Art ? (
+    <span class={lead ? "plate" : "card-art"}>
+      <Art variant="thumb" />
+    </span>
+  ) : null
+}

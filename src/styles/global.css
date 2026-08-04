@@ -362,6 +362,25 @@ a:hover {
   margin-bottom: 1rem;
 }
 
+/*
+ * A real image gets no padding and no ground. The sunk plate exists to hold a
+ * drawn figure off the paper, and around a photograph it reads as a mount.
+ * Cropped to the same 1.85:1 the figures use so a mixed row stays level.
+ */
+.art-photo {
+  padding: 0;
+  background: none;
+  overflow: hidden;
+}
+
+.art-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 400 / 216;
+  object-fit: cover;
+}
+
 /* the labelled figure is for the article page. see the note in index.astro */
 .art-wide {
   display: block;
@@ -467,6 +486,19 @@ a:hover {
   padding: 2.5rem var(--gutter) 2rem;
 }
 
+/*
+ * A photographic hero runs edge to edge with no padding at all. Capped by
+ * viewport height rather than a fixed pixel height, so a tall screenshot cannot
+ * push the headline off the first screen.
+ */
+.hero-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 60vh;
+  object-fit: cover;
+}
+
 .article-head {
   display: grid;
   grid-template-columns: 1fr 17rem;
@@ -566,6 +598,18 @@ a:hover {
   font-size: 0.6875rem;
   letter-spacing: 0.05em;
   color: var(--muted);
+}
+
+/*
+ * A real image inside an article. Ruled rather than shadowed: a screenshot on
+ * paper needs an edge or it bleeds into the page, and a shadow would be the
+ * first non-flat thing on the whole site.
+ */
+.shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--rule);
 }
 
 .prose > * + * {

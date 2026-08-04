@@ -2,7 +2,7 @@
 import { getCollection } from "astro:content";
 import Base from "../layouts/Base.astro";
 import FormattedDate from "../components/FormattedDate.astro";
-import { getDiagram } from "../components/diagrams";
+import Preview from "../components/Preview.astro";
 import { SITE_STATEMENT, SITE_BLURB } from "../consts";
 
 const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
@@ -18,13 +18,8 @@ const [lead, ...rest] = posts;
 const rail = rest.slice(0, 2);
 const row = rest.slice(2);
 
-/*
- * Every preview here is the STRIPPED variant, never the labelled one. The lead
- * figure lands around 700px wide, where the labelled version's 15px captions
- * would render near 9px. The labelled figure is what you get for opening the
- * piece, and the front page shows the shape of the idea instead.
- */
-const LeadArt = (lead ? getDiagram(lead.data.diagram) : null) as any;
+// Preview.astro picks between a real cover image and the stripped figure. The
+// reasoning for that choice lives there.
 ---
 
 <Base>
@@ -43,11 +38,7 @@ const LeadArt = (lead ? getDiagram(lead.data.diagram) : null) as any;
           <div class:list={["front-grid", rail.length === 0 && "front-solo"]}>
             <article class="lead">
               <a class="lead-link" href={`/blog/${lead.id}/`}>
-                {LeadArt && (
-                  <span class="plate">
-                    <LeadArt variant="thumb" />
-                  </span>
-                )}
+                <Preview post={lead} size="lead" />
                 <span class="kicker">{lead.data.topic}</span>
                 <h2>{lead.data.title}</h2>
               </a>
@@ -60,15 +51,10 @@ const LeadArt = (lead ? getDiagram(lead.data.diagram) : null) as any;
             {rail.length > 0 && (
               <div class="rail">
                 {rail.map((post) => {
-                  const Art = getDiagram(post.data.diagram) as any;
                   return (
                     <article class="rail-item">
                       <a href={`/blog/${post.id}/`}>
-                        {Art && (
-                          <span class="card-art">
-                            <Art variant="thumb" />
-                          </span>
-                        )}
+                        <Preview post={post} size="card" />
                         <span class="kicker">{post.data.topic}</span>
                         <h3>{post.data.title}</h3>
                         <p>{post.data.description}</p>
@@ -101,15 +87,10 @@ const LeadArt = (lead ? getDiagram(lead.data.diagram) : null) as any;
         <div class="shell">
           <ul class="grid">
             {row.map((post) => {
-              const Art = getDiagram(post.data.diagram) as any;
               return (
                 <li>
                   <a href={`/blog/${post.id}/`}>
-                    {Art && (
-                      <span class="card-art">
-                        <Art variant="thumb" />
-                      </span>
-                    )}
+                    <Preview post={post} size="card" />
                     <span class="kicker">{post.data.topic}</span>
                     <h3>{post.data.title}</h3>
                     <p>{post.data.description}</p>

@@ -1,15 +1,19 @@
 export const SITE_TITLE = "Teximos";
 export const SITE_DESCRIPTION =
-  "A publication about how software actually behaves in production, told through the failures.";
+  "A publication about technology: what just shipped, what it actually does and what it costs when it breaks.";
 export const SITE_URL = "https://teximos.com";
 
 // The line under the wordmark on the index. States what the publication is
 // about rather than who writes it.
+//
+// Deliberately wider than the first version, which described only the
+// production incident write-ups and read as a bug diary. The remit is the
+// industry: releases, product decisions, opinion and the engineering.
 export const SITE_STATEMENT =
-  "Software that is working exactly as written can still be wrong. This is a record of the specific ways.";
+  "A publication about technology and the people shipping it. What just changed, what it actually does and what it costs when it breaks.";
 
 export const SITE_BLURB =
-  "Each piece is one real incident from a production system, with the code that caused it and the money it cost. No tutorials. No roundups.";
+  "Model releases, product decisions, opinions with the reasoning left in and real incidents with the code attached. Written so that anyone who works near software can read it, not only the people who wrote it.";
 
 export const AUTHOR = {
   name: "Jeremiah Diana",

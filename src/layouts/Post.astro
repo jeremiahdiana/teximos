@@ -1,4 +1,5 @@
 ---
+import { Image } from "astro:assets";
 import Base from "./Base.astro";
 import FormattedDate from "../components/FormattedDate.astro";
 import { getDiagram } from "../components/diagrams";
@@ -10,11 +11,15 @@ interface Props {
   date: Date;
   topic: string;
   diagram?: string;
+  /** A real image, which wins over `diagram` when both are set. */
+  cover?: ImageMetadata;
+  coverAlt?: string;
   /** Collection id, which is also the slug the social card is filed under. */
   slug: string;
 }
 
-const { title, description, date, topic, diagram, slug } = Astro.props;
+const { title, description, date, topic, diagram, cover, coverAlt, slug } =
+  Astro.props;
 const Hero = getDiagram(diagram) as any;
 ---
 
@@ -27,7 +32,19 @@ const Hero = getDiagram(diagram) as any;
 >
   <article>
     {
-      Hero && (
+      cover ? (
+        /* A photograph or a screenshot runs edge to edge. Boxing it inside the
+           same padded band the drawn figures use would read as a slide. */
+        <div class="hero hero-photo">
+          <Image
+            src={cover}
+            alt={coverAlt ?? ""}
+            widths={[760, 1520, 2280]}
+            sizes="100vw"
+            loading="eager"
+          />
+        </div>
+      ) : Hero ? (
         <div class="hero">
           <div class="hero-inner">
             {/*
@@ -43,7 +60,7 @@ const Hero = getDiagram(diagram) as any;
             </div>
           </div>
         </div>
-      )
+      ) : null
     }
 
     <div class="shell shell-article">
