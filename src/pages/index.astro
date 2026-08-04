@@ -9,7 +9,21 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
 );
 
+/*
+ * A front page rather than a list: the newest piece runs large, the next two
+ * stack in a rail beside it, and everything after that falls into the row
+ * underneath. Slicing rather than indexing so the page composes at any count.
+ */
 const [lead, ...rest] = posts;
+const rail = rest.slice(0, 2);
+const row = rest.slice(2);
+
+/*
+ * Every preview here is the STRIPPED variant, never the labelled one. The lead
+ * figure lands around 700px wide, where the labelled version's 15px captions
+ * would render near 9px. The labelled figure is what you get for opening the
+ * piece, and the front page shows the shape of the idea instead.
+ */
 const LeadArt = (lead ? getDiagram(lead.data.diagram) : null) as any;
 ---
 
@@ -24,31 +38,49 @@ const LeadArt = (lead ? getDiagram(lead.data.diagram) : null) as any;
 
   {
     lead && (
-      <section class="lead-section">
+      <section class="front">
         <div class="shell">
-          {LeadArt && (
-            <a class="lead-art" href={`/blog/${lead.id}/`} tabindex="-1" aria-hidden="true">
-              <span class="art-wide">
-                <LeadArt variant="hero" />
-              </span>
-              <span class="art-narrow">
-                <LeadArt variant="thumb" />
-              </span>
-            </a>
-          )}
-          <div class="lead">
-            <div>
-              <span class="kicker">{lead.data.topic}</span>
-              <a class="title" href={`/blog/${lead.id}/`}>
+          <div class:list={["front-grid", rail.length === 0 && "front-solo"]}>
+            <article class="lead">
+              <a class="lead-link" href={`/blog/${lead.id}/`}>
+                {LeadArt && (
+                  <span class="plate">
+                    <LeadArt variant="thumb" />
+                  </span>
+                )}
+                <span class="kicker">{lead.data.topic}</span>
                 <h2>{lead.data.title}</h2>
               </a>
-            </div>
-            <div class="aside">
-              <p>{lead.data.description}</p>
+              <p class="deck">{lead.data.description}</p>
               <span class="meta">
                 <FormattedDate date={lead.data.date} />
               </span>
-            </div>
+            </article>
+
+            {rail.length > 0 && (
+              <div class="rail">
+                {rail.map((post) => {
+                  const Art = getDiagram(post.data.diagram) as any;
+                  return (
+                    <article class="rail-item">
+                      <a href={`/blog/${post.id}/`}>
+                        {Art && (
+                          <span class="card-art">
+                            <Art variant="thumb" />
+                          </span>
+                        )}
+                        <span class="kicker">{post.data.topic}</span>
+                        <h3>{post.data.title}</h3>
+                        <p>{post.data.description}</p>
+                        <span class="meta">
+                          <FormattedDate date={post.data.date} style="short" />
+                        </span>
+                      </a>
+                    </article>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -64,12 +96,11 @@ const LeadArt = (lead ? getDiagram(lead.data.diagram) : null) as any;
   }
 
   {
-    rest.length > 0 && (
+    row.length > 0 && (
       <section class="more">
         <div class="shell">
-          <span class="kicker">More</span>
           <ul class="grid">
-            {rest.map((post) => {
+            {row.map((post) => {
               const Art = getDiagram(post.data.diagram) as any;
               return (
                 <li>

@@ -269,19 +269,100 @@ a:hover {
   line-height: 1.6;
 }
 
-/* ---------- lead article ---------- */
+/* ---------- the front page ---------- */
 
-.lead-section {
+/*
+ * The newest piece runs large with a rail of two beside it, divided by a
+ * vertical rule. The vertical rules are the whole difference: a newspaper
+ * divides its columns and an application stacks its cards, and this has to read
+ * as the first of those.
+ */
+.front {
   border-bottom: 1px solid var(--rule);
 }
 
-/* the cover: the lead article's figure, run big above its headline */
-.lead-art {
-  display: block;
-  border-bottom: none;
-  padding: 2.75rem 0 0.5rem;
+.front-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 21rem;
+  padding: 3rem 0 3.5rem;
 }
 
+/* one piece published so far, so there is no rail to sit next to */
+.front-solo {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.lead {
+  padding-right: 2.75rem;
+  min-width: 0;
+}
+
+.front-solo .lead {
+  padding-right: 0;
+}
+
+.lead-link {
+  display: block;
+  border-bottom: none;
+}
+
+/* the cover: the figure sunk into the page like a printed plate */
+.plate {
+  display: block;
+  background: var(--sunk);
+  padding: 2rem 2.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.lead h2 {
+  font-size: clamp(2rem, 4vw, 2.875rem);
+  letter-spacing: -0.03em;
+  margin-top: 0.7rem;
+  transition: opacity 0.12s ease;
+}
+
+.lead-link:hover h2 {
+  opacity: 0.6;
+}
+
+.lead .deck {
+  margin: 1rem 0 0;
+  color: var(--muted);
+  font-size: 1.125rem;
+  line-height: 1.55;
+  max-width: 46ch;
+}
+
+.lead .meta {
+  display: block;
+  margin-top: 1.1rem;
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+}
+
+.rail {
+  border-left: 1px solid var(--rule);
+  padding-left: 2.75rem;
+  min-width: 0;
+}
+
+.rail-item + .rail-item {
+  border-top: 1px solid var(--rule);
+  margin-top: 1.75rem;
+  padding-top: 1.75rem;
+}
+
+/* the preview figure on every card. the figure IS the preview here */
+.card-art {
+  display: block;
+  background: var(--sunk);
+  padding: 0.9rem 1rem;
+  margin-bottom: 1rem;
+}
+
+/* the labelled figure is for the article page. see the note in index.astro */
 .art-wide {
   display: block;
 }
@@ -290,64 +371,10 @@ a:hover {
   display: none;
 }
 
-/* the preview image on each card in the grid */
-.card-art {
-  display: block;
-  background: var(--sunk);
-  padding: 0.9rem 1rem;
-  margin-bottom: 1rem;
-}
-
-.lead {
-  display: grid;
-  grid-template-columns: 1fr 20rem;
-  gap: 4rem;
-  align-items: start;
-  padding: 3.5rem 0;
-}
-
-.lead a.title {
-  border-bottom: none;
-  display: block;
-  margin-top: 0.9rem;
-}
-
-.lead h2 {
-  font-size: clamp(2rem, 4.4vw, 3.125rem);
-  letter-spacing: -0.03em;
-  transition: opacity 0.12s ease;
-}
-
-.lead a.title:hover h2 {
-  opacity: 0.6;
-}
-
-.lead .aside {
-  padding-top: 0.4rem;
-}
-
-.lead .aside p {
-  margin: 0 0 1.1rem;
-  color: var(--muted);
-  font-size: 1.0625rem;
-  line-height: 1.6;
-}
-
-.lead .aside .meta {
-  font-family: var(--mono);
-  font-size: 0.6875rem;
-  color: var(--muted);
-  letter-spacing: 0.05em;
-}
-
-/* ---------- the grid of everything else ---------- */
+/* ---------- the row underneath ---------- */
 
 .more {
-  padding: 3.5rem 0 5rem;
-}
-
-.more > .kicker {
-  margin-bottom: 1.75rem;
+  padding: 3rem 0 5rem;
 }
 
 .grid {
@@ -355,31 +382,54 @@ a:hover {
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2.5rem 3rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: 0;
+  row-gap: 2.75rem;
 }
 
+/*
+ * Column rules belong in the gutter, so the padding sits on the items and the
+ * outermost column of each row gives its side back, which keeps the block flush
+ * with the shell instead of inset from it.
+ */
 .grid li {
-  border-top: 1px solid var(--rule);
-  padding-top: 1.1rem;
+  border-top: 2px solid var(--fg);
+  border-left: 1px solid var(--rule);
+  padding: 1.1rem 1.75rem 0;
+  min-width: 0;
 }
 
+.grid li:nth-child(3n + 1) {
+  border-left: 0;
+  padding-left: 0;
+}
+
+.grid li:nth-child(3n) {
+  padding-right: 0;
+}
+
+/* ---------- shared card type ---------- */
+
+.rail a,
 .grid a {
   border-bottom: none;
   display: block;
 }
 
+.rail h3,
 .grid h3 {
-  font-size: 1.3125rem;
+  font-size: 1.25rem;
   margin-top: 0.6rem;
   letter-spacing: -0.02em;
   transition: opacity 0.12s ease;
 }
 
+.rail a:hover h3,
 .grid a:hover h3 {
   opacity: 0.6;
 }
 
+.rail p,
 .grid p {
   margin: 0.5rem 0 0;
   color: var(--muted);
@@ -387,6 +437,7 @@ a:hover {
   line-height: 1.55;
 }
 
+.rail .meta,
 .grid .meta {
   font-family: var(--mono);
   font-size: 0.6875rem;
@@ -707,12 +758,51 @@ a:hover {
 /* ---------- responsive ---------- */
 
 @media (max-width: 62rem) {
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
+  /* the rail drops under the lead and becomes a two column strip of its own */
+  .front-grid {
+    grid-template-columns: minmax(0, 1fr);
+    padding-bottom: 3rem;
   }
   .lead {
-    grid-template-columns: 1fr 16rem;
-    gap: 2.5rem;
+    padding-right: 0;
+  }
+  .rail {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-left: 0;
+    border-top: 1px solid var(--rule);
+    padding-left: 0;
+    margin-top: 2.25rem;
+    padding-top: 2.25rem;
+  }
+  .rail-item + .rail-item {
+    border-top: 0;
+    border-left: 1px solid var(--rule);
+    margin-top: 0;
+    padding-top: 0;
+    padding-left: 2.25rem;
+  }
+  /*
+   * Two columns, so the rules move to every other item. The three column rules
+   * are put back to the default first and the two column ones then override
+   * them, which works on source order at equal specificity.
+   */
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .grid li:nth-child(3n + 1) {
+    border-left: 1px solid var(--rule);
+    padding-left: 1.75rem;
+  }
+  .grid li:nth-child(3n) {
+    padding-right: 1.75rem;
+  }
+  .grid li:nth-child(2n + 1) {
+    border-left: 0;
+    padding-left: 0;
+  }
+  .grid li:nth-child(2n) {
+    padding-right: 0;
   }
 }
 
@@ -720,7 +810,6 @@ a:hover {
   :root {
     --gutter: 1.5rem;
   }
-  .lead,
   .colophon .inner,
   .article-head {
     grid-template-columns: 1fr;
@@ -757,12 +846,35 @@ a:hover {
   .art-narrow {
     display: block;
   }
-  .lead .aside {
-    padding-top: 0;
+  .plate {
+    padding: 1.1rem 1.25rem;
+  }
+  .rail {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .rail-item + .rail-item {
+    border-left: 0;
+    border-top: 1px solid var(--rule);
+    padding-left: 0;
+    margin-top: 1.75rem;
+    padding-top: 1.75rem;
   }
   .grid {
-    grid-template-columns: 1fr;
-    gap: 2rem;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  /*
+   * One column, so no column rules at all. Every nth-child selector set above
+   * is named here, because a bare `.grid li` loses to them on specificity
+   * rather than on order.
+   */
+  .grid li,
+  .grid li:nth-child(2n),
+  .grid li:nth-child(2n + 1),
+  .grid li:nth-child(3n),
+  .grid li:nth-child(3n + 1) {
+    border-left: 0;
+    padding-left: 0;
+    padding-right: 0;
   }
   .masthead {
     padding: 3rem 0 2.5rem;

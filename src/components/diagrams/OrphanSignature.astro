@@ -1,0 +1,205 @@
+---
+/**
+ * The orphan reasoning signature, as a figure.
+ *
+ * Form: two accounts of the same request, so two lanes, aligned so the eye can
+ * only read them against each other. The upper lane breaks. The lower lane runs
+ * the full width without a mark on it. That gap is the entire incident: the
+ * thing that failed and the thing that was watching disagreed completely.
+ *
+ * The empty outline on the left is a part that was never sent. Drawing it as a
+ * held slot rather than leaving a space is what makes the signature next to it
+ * read as an orphan.
+ */
+interface Props {
+  variant?: "hero" | "thumb";
+}
+
+const { variant = "hero" } = Astro.props;
+const thumb = variant === "thumb";
+
+const H = thumb ? 44 : 64;
+const laneA = thumb ? 52 : 140;
+const laneB = thumb ? 126 : 290;
+const base = (y: number) => y + H * 0.66;
+
+const cut = thumb ? 280 : 820;
+const right = thumb ? 380 : 1012;
+---
+
+<svg
+  viewBox={thumb ? "0 0 400 216" : "0 0 1200 460"}
+  role="img"
+  aria-label="Two accounts of one response. The stream carried a reasoning signature with no reasoning in front of it, threw, and returned zero characters. The log recorded an uninterrupted HTTP 200."
+  xmlns="http://www.w3.org/2000/svg"
+  class={thumb ? "dg dg-t" : "dg"}
+>
+  {
+    !thumb && (
+      <>
+        <text class="dg-cap" x="60" y="58">
+          ONE RESPONSE, TWO ACCOUNTS OF IT
+        </text>
+        <line class="dg-rule" x1="60" y1="80" x2="1140" y2="80" />
+      </>
+    )
+  }
+
+  {/* the stream: a part that never came, a part that depended on it, a stop */}
+  <rect
+    class="dg-open"
+    x={thumb ? 20 : 300}
+    y={laneA}
+    width={thumb ? 100 : 200}
+    height={H}
+    rx="3"
+  />
+  <rect
+    x={thumb ? 132 : 516}
+    y={laneA}
+    width={thumb ? 130 : 280}
+    height={H}
+    rx="3"
+    fill="currentColor"
+  />
+  <line
+    class="dg-cut"
+    x1={cut}
+    y1={laneA - (thumb ? 16 : 28)}
+    x2={cut}
+    y2={laneA + H + (thumb ? 16 : 28)}
+  />
+  <line
+    class="dg-dead"
+    x1={cut + (thumb ? 12 : 24)}
+    y1={laneA + H / 2}
+    x2={right}
+    y2={laneA + H / 2}
+  />
+
+  {/* the log: uninterrupted, all the way across */}
+  <rect
+    class="dg-flat"
+    x={thumb ? 20 : 300}
+    y={laneB}
+    width={right - (thumb ? 20 : 300)}
+    height={H}
+    rx="3"
+  />
+
+  {
+    !thumb && (
+      <>
+        <text class="dg-lbl dg-end dg-on" x="280" y={base(laneA)}>
+          the stream
+        </text>
+        <text class="dg-lbl dg-end" x="280" y={base(laneB)}>
+          the log
+        </text>
+
+        <text class="dg-val dg-on" x="1030" y={base(laneA)}>
+          0 chars
+        </text>
+        <text class="dg-val" x="1030" y={base(laneB)}>
+          HTTP 200
+        </text>
+
+        <text class="dg-cap" x="300" y="240">
+          REASONING, NEVER SENT
+        </text>
+        <text class="dg-cap dg-on" x="516" y="240">
+          REASONING-SIGNATURE
+        </text>
+
+        <line class="dg-rule" x1="60" y1="412" x2="1140" y2="412" />
+        <text class="dg-cap" x="60" y="440">
+          IT THREW INSIDE THE STREAM TRANSFORM, SO ONERROR AND ONFINISH NEVER RAN
+        </text>
+      </>
+    )
+  }
+</svg>
+
+<style>
+  .dg {
+    display: block;
+    width: 100%;
+    height: auto;
+    color: var(--fg);
+  }
+
+  .dg text {
+    font-family: var(--mono);
+    fill: currentColor;
+  }
+
+  .dg-cap {
+    font-size: 15px;
+    letter-spacing: 0.11em;
+    opacity: 0.5;
+  }
+
+  .dg-lbl {
+    font-size: 21px;
+    opacity: 0.5;
+  }
+
+  .dg-val {
+    font-size: 18px;
+    opacity: 0.5;
+  }
+
+  .dg-on {
+    opacity: 1;
+  }
+
+  .dg-end {
+    text-anchor: end;
+  }
+
+  /* a part the SDK required and the provider never sent */
+  .dg-open {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    opacity: 0.3;
+  }
+
+  /* where it stopped */
+  .dg-cut {
+    stroke: currentColor;
+    stroke-width: 4;
+    opacity: 1;
+  }
+
+  /* everything the reader was owed and did not get */
+  .dg-dead {
+    stroke: currentColor;
+    stroke-width: 1;
+    opacity: 0.22;
+  }
+
+  .dg-flat {
+    fill: currentColor;
+    opacity: 0.28;
+  }
+
+  /*
+   * The thumb viewBox is 400 units against a card about 250px wide, so a one
+   * unit stroke lands under a pixel and the dead run after the break vanishes
+   * entirely. That run is half the figure, so it gets weight back here.
+   */
+  .dg-t .dg-dead {
+    stroke-width: 2.5;
+  }
+
+  .dg-t .dg-open {
+    stroke-width: 3;
+  }
+
+  .dg-rule {
+    stroke: currentColor;
+    stroke-width: 1;
+    opacity: 0.18;
+  }
+</style>

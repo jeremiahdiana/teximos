@@ -6,10 +6,10 @@ export const SITE_URL = "https://teximos.com";
 // The line under the wordmark on the index. States what the publication is
 // about rather than who writes it.
 export const SITE_STATEMENT =
-  "Software fails in specific ways, and the specifics are where the lesson is.";
+  "Software that is working exactly as written can still be wrong. This is a record of the specific ways.";
 
 export const SITE_BLURB =
-  "Every piece here is a real incident with the real numbers attached. Billing meters that counted the wrong unit, guards that checked the wrong set, defaults that were safe and silent at the same time. No tutorials, no roundups.";
+  "Each piece is one real incident from a production system, with the code that caused it and the money it cost. No tutorials. No roundups.";
 
 export const AUTHOR = {
   name: "Jeremiah Diana",
@@ -17,6 +17,6 @@ export const AUTHOR = {
   // Deliberately no product links here. This is not a funnel.
   links: [
     { label: "GitHub", href: "https://github.com/joinFITR/teximos" },
-    { label: "LinkedIn", href: "" },
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/jerehm/" },
   ],
 };

@@ -1,5 +1,9 @@
 import MissingPrice from "./MissingPrice.astro";
 import WrongBaseline from "./WrongBaseline.astro";
+import TransactionRetry from "./TransactionRetry.astro";
+import SpellingConstraint from "./SpellingConstraint.astro";
+import OrphanSignature from "./OrphanSignature.astro";
+import MissingDoc from "./MissingDoc.astro";
 
 /**
  * Frontmatter `diagram` selects from this map. An unknown or absent name
@@ -9,6 +13,10 @@ import WrongBaseline from "./WrongBaseline.astro";
 export const DIAGRAMS: Record<string, unknown> = {
   MissingPrice,
   WrongBaseline,
+  TransactionRetry,
+  SpellingConstraint,
+  OrphanSignature,
+  MissingDoc,
 };
 
 export function getDiagram(name?: string) {

@@ -1,0 +1,129 @@
+---
+title: "A model that never worked, because a guard was keyed on spelling"
+description: "The most expensive model in the catalogue answered every request with a 200, six hundred milliseconds and zero characters. It had done that since the day it was listed."
+date: 2026-08-05T10:00:00Z
+topic: "Model routing"
+diagram: SpellingConstraint
+---
+
+import Pull from "../../components/Pull.astro";
+
+The most expensive model in the catalogue returned nothing. Not an error page,
+not a timeout. A 200, six hundred milliseconds, zero characters.
+
+It had been doing that since the day it was listed.
+
+## What the guard was for
+
+The SDK version in use hardcodes a default:
+
+```ts
+temperature: temperature != null ? temperature : 0
+```
+
+There is no way to send no temperature. Omitting it sends zero. Anthropic's
+current models reject an explicit non-default temperature, so the only way to
+serve them is to pass their own default back to them on purpose:
+
+```ts
+const temperature = /^claude-.*-5$/.test(modelId) ? 1 : undefined;
+```
+
+Read that pattern out loud and it says "a Claude 5 model". What it tests is
+whether the id ends in the character 5.
+
+```
+claude-sonnet-5     ends in 5
+claude-fable-5      ends in 5
+claude-opus-4-8     does not
+```
+
+So Opus was sent temperature 0, and every request it ever received came back:
+
+```
+AI_APICallError: `temperature` is deprecated for this model.
+```
+
+## The same shape, twice
+
+Next to it sat a second guard, deciding the output budget for models that spend
+hidden reasoning tokens. Those models need headroom, because a tight cap is
+consumed entirely by thinking and the response finishes on a length stop with no
+visible characters in it.
+
+Measured on one prompt, at two caps:
+
+| model | 2048 | 16000 |
+| --- | --- | --- |
+| gpt-5.6-sol | 0 chars | 4740 chars |
+| claude-sonnet-5 | 0 chars | 3541 chars |
+
+That guard was written `/-5$/`. Same idea, same spelling, same hole. Opus was
+handed the exact cap the guard exists to prevent.
+
+Two independent breakages from one root cause. Neither was a typo. Both patterns
+matched precisely what they were written to match.
+
+<Pull>
+A version number is not a version number. It is a string somebody chose.
+</Pull>
+
+## Nine models passing was the problem
+
+The catalogue had ten entries. Nine of them answered.
+
+Any smoke test that sends a prompt and checks for text would pass, because it
+sends that prompt to the default model, and the default model was fine. The
+failure needed all ten driven individually before it showed itself, and there is
+no natural moment in a week where anyone does that.
+
+Nine out of ten looks like a healthy system. It is also exactly what one
+completely dead model looks like from the outside.
+
+## The rule that came out of it
+
+A catalogue entry is a promise that the model answers. Nothing should be able to
+join the list without something proving it returns text.
+
+Both predicates moved into one module and were rekeyed on the family rather than
+the version:
+
+```ts
+export function needsExplicitTemperature(modelId: string): boolean {
+  return /^claude-/.test(canonicalModelId(modelId));
+}
+```
+
+They are exported so a script can walk the entire catalogue and fail the moment a
+listed model would be sent parameters its provider rejects. The script also
+checks invented future ids, `claude-opus-5-2` and `claude-haiku-6` among them, so
+a model added next month cannot quietly miss the constraint the same way.
+
+## Then it came back
+
+The next day, same bug, different call site.
+
+Compare mode runs its own generation call and imports nothing from the chat
+route. It had inherited a copy of the original inline pattern, and the fix had
+only rewired the one caller. So the model was a blank column in compare mode for
+another full day.
+
+That is the worst surface it could have picked. A blank column beside nine full
+ones does not read as broken. It reads as that model having lost, and compare
+mode is the headline feature of the expensive tier.
+
+The verification script stayed green the whole time. It tests the module that the
+broken call site never imported.
+
+## What I would take from this
+
+Two things, and the second one is the one I keep relearning.
+
+A constraint that belongs to a provider should be keyed on the provider. Naming
+schemes are marketing decisions. They change without telling you, and a pattern
+that encodes one is a bet on a company's future naming.
+
+Moving a rule into a shared module does not fix the callers that never called it.
+The module gets a test, the test passes, and the passing test is now describing
+code that the broken path does not run. Grep for every call site of a constraint,
+not only for the module that owns it.

@@ -1,0 +1,115 @@
+---
+title: "A customer paid, and the webhook had nowhere to put it"
+description: "Stripe did everything right. The subscription was active and the money had moved. The account it belonged to had no record that any of it happened."
+date: 2026-08-05T09:00:00Z
+topic: "Payments"
+diagram: MissingDoc
+---
+
+import Pull from "../../components/Pull.astro";
+
+A customer signed in with Google at 13:40:41. They went straight to the payment
+page, and at 13:42:45 they paid. Three seconds later the webhook fired and
+returned a 500. It returned a 500 again on the retry, and again on the one after
+that.
+
+Everything on the payment side was correct. The subscription was active. The
+charge had settled. The metadata on the session carried the user id, the plan
+they had bought and the flag marking them as an early customer. All of it was
+right.
+
+In our own database they had no plan at all.
+
+## The two minutes that mattered
+
+Creating the user record was a side effect of finishing onboarding. Signing in
+does not do it. Onboarding does, at the end, once.
+
+They never finished onboarding. They signed in, saw the offer and paid, all
+inside about two minutes, and the offer was reachable without walking the flow
+that would have created the record. So at the moment the webhook arrived, there
+was no document with that id on it.
+
+The handler did this:
+
+```ts
+await adminDb.collection('users').doc(uid).update({ plan, subscriptionId });
+```
+
+Firestore's `update()` requires the document to exist already. When it does not:
+
+```
+5 NOT_FOUND: No document to update
+```
+
+It throws. The handler returns a 500. Stripe retries, gets another 500, and
+keeps a `pending_webhooks` count that nobody was looking at.
+
+<Pull>
+They were, as far as the product was concerned, a stranger who had paid us.
+</Pull>
+
+## Why nothing raised its hand
+
+There was a second handler that should have caught this. `customer.subscription.updated`
+fires shortly after a checkout completes and grants the plan as well. Belt and
+braces.
+
+It looked the user up by subscription id, found nothing, and returned 200.
+
+That is the part worth sitting with. The first handler failed loudly and got
+retried until Stripe gave up on it. The second failed silently and reported
+success. A lookup that comes back empty is not obviously an error, so it was
+written as a no-op, and a no-op is indistinguishable from a job well done in
+every dashboard we had.
+
+Between them the two handlers produced no alert, no failed job and no anomalous
+metric. The only signal anywhere was a counter in Stripe's own interface that
+tallies pending deliveries across every endpoint on the account, which is a hint
+rather than proof.
+
+## The fix is one method
+
+```ts
+await adminDb.collection('users').doc(uid).set(
+  { plan, subscriptionId },
+  { merge: true },
+);
+```
+
+`set` with `merge` creates the document when it is absent and merges into it when
+it is not. It is still idempotent, so a replayed webhook is harmless. It has no
+failure mode that `update` does not also have.
+
+The second handler changed too. When the lookup by subscription finds nobody, it
+now falls back to the user id sitting in the session metadata and grants on that
+instead of returning early.
+
+## The assumption underneath
+
+`update()` is the honest method. It says what it does. It refuses to invent a
+record, which sounds like exactly the discipline you want in a payments handler.
+
+The discipline is misplaced here, because it is guarding an ordering that money
+does not respect. The code assumed a person becomes a user before they become a
+customer. That holds for almost everybody, right up until somebody pays inside
+the first two minutes, which is the behaviour of your most eager customer rather
+than your least.
+
+Any step reachable from outside the normal flow will be reached out of order
+eventually. The handler that runs when money moves is the last place to depend
+on the order.
+
+## What proved it
+
+The test drives the deployed webhook with a properly signed event for a user id
+that has no document. Signed properly, so it exercises the real path rather than
+a mock of it.
+
+Against production before the fix it failed eight of nine assertions. After it,
+ten of ten.
+
+That baseline is the reason the test means anything. A test written after a fix
+passes on the day it is written, which tells you nothing about whether it would
+have caught the thing it was written for. Running it against the broken version
+first is what turns it from documentation into evidence.

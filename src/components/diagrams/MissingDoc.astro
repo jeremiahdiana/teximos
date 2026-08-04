@@ -1,0 +1,191 @@
+---
+/**
+ * The payment that landed before the document existed, as a figure.
+ *
+ * Form: a sequence, so a timeline. The band underneath is not time, it is
+ * state: whether the record the webhook was about to write into exists yet.
+ * Hollow means it does not.
+ *
+ * The three events are spaced evenly rather than to scale. Two minutes and
+ * three seconds on one linear axis would collapse the last two marks into each
+ * other and the reader would lose the only thing worth seeing, which is which
+ * side of the band each mark falls on.
+ */
+interface Props {
+  variant?: "hero" | "thumb";
+}
+
+const { variant = "hero" } = Astro.props;
+const thumb = variant === "thumb";
+
+const bandY = thumb ? 120 : 280;
+const bandH = thumb ? 44 : 56;
+const x0 = thumb ? 20 : 300;
+const x1 = thumb ? 380 : 1012;
+// where onboarding finally ran and the document appeared
+const created = thumb ? 300 : 880;
+
+const ticks = thumb
+  ? [
+      { x: 48, top: 64, on: false },
+      { x: 214, top: 84, on: true },
+      { x: 252, top: 100, on: true },
+    ]
+  : [
+      { x: 340, top: 144, on: false },
+      { x: 660, top: 202, on: true },
+      { x: 810, top: 260, on: true },
+    ];
+---
+
+<svg
+  viewBox={thumb ? "0 0 400 216" : "0 0 1200 460"}
+  role="img"
+  aria-label="A user signed in at 13:40:41 and paid 24 dollars at 13:42:45, both before onboarding had created his user document. The webhook fired three seconds later and threw."
+  xmlns="http://www.w3.org/2000/svg"
+  class={thumb ? "dg dg-t" : "dg"}
+>
+  {
+    !thumb && (
+      <>
+        <text class="dg-cap" x="60" y="58">
+          ONE PAYING CUSTOMER, 2026-08-01
+        </text>
+        <line class="dg-rule" x1="60" y1="80" x2="1140" y2="80" />
+
+        <text class="dg-cap" x="340" y="132">
+          13:40:41 SIGNED IN
+        </text>
+        <text class="dg-cap dg-on" x="660" y="190">
+          13:42:45 PAID $24
+        </text>
+        <text class="dg-cap dg-on" x="810" y="248">
+          13:42:48 UPDATE() THREW
+        </text>
+      </>
+    )
+  }
+
+  {
+    ticks.map((t) => (
+      <>
+        <line
+          class={t.on ? "dg-tick dg-on" : "dg-tick"}
+          x1={t.x}
+          y1={t.top}
+          x2={t.x}
+          y2={bandY}
+        />
+        <circle
+          class={t.on ? "dg-dot dg-on" : "dg-dot"}
+          cx={t.x}
+          cy={bandY}
+          r={thumb ? 5 : 7}
+        />
+      </>
+    ))
+  }
+
+  {/* the record does not exist yet */}
+  <rect
+    class="dg-open"
+    x={x0}
+    y={bandY}
+    width={created - x0}
+    height={bandH}
+    rx="3"
+  />
+  {/* onboarding finally ran */}
+  <rect
+    class="dg-flat"
+    x={created}
+    y={bandY}
+    width={x1 - created}
+    height={bandH}
+    rx="3"
+  />
+
+  {
+    !thumb && (
+      <>
+        <text class="dg-cap dg-on" x="300" y="372">
+          NO USER DOCUMENT YET
+        </text>
+        <text class="dg-cap" x="880" y="372">
+          ONBOARDING CREATES IT
+        </text>
+
+        <line class="dg-rule" x1="60" y1="412" x2="1140" y2="412" />
+        <text class="dg-cap" x="60" y="440">
+          UPDATE() THROWS 5 NOT_FOUND ON A MISSING DOCUMENT. SET WITH MERGE CREATES IT.
+        </text>
+      </>
+    )
+  }
+</svg>
+
+<style>
+  .dg {
+    display: block;
+    width: 100%;
+    height: auto;
+    color: var(--fg);
+  }
+
+  .dg text {
+    font-family: var(--mono);
+    fill: currentColor;
+  }
+
+  .dg-cap {
+    font-size: 15px;
+    letter-spacing: 0.11em;
+    opacity: 0.5;
+  }
+
+  .dg-tick {
+    stroke: currentColor;
+    stroke-width: 2;
+    opacity: 0.35;
+  }
+
+  .dg-dot {
+    fill: currentColor;
+    opacity: 0.35;
+  }
+
+  /* the window in which the document did not exist */
+  .dg-open {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    opacity: 0.45;
+  }
+
+  .dg-flat {
+    fill: currentColor;
+    opacity: 0.28;
+  }
+
+  .dg-rule {
+    stroke: currentColor;
+    stroke-width: 1;
+    opacity: 0.18;
+  }
+
+  /* the thumb renders at roughly a fifth of the hero's width, so the ticks and
+     the band outline need weight back or the timeline reads as empty */
+  .dg-t .dg-tick {
+    stroke-width: 3;
+  }
+
+  .dg-t .dg-open {
+    stroke-width: 3;
+  }
+
+  /* Last, deliberately. It is combined with .dg-tick and .dg-dot, which both
+     set an opacity of their own, and equal specificity is settled by order. */
+  .dg-on {
+    opacity: 1;
+  }
+</style>

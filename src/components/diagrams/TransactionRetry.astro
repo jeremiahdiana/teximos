@@ -1,0 +1,164 @@
+---
+/**
+ * The free tier race, as a figure.
+ *
+ * Form: a fixed set of twelve things, of which some number passed. That is a
+ * count, not a magnitude, so it is drawn as twelve marks rather than as a bar.
+ * The reader can verify the number by looking, which is the point when the
+ * number is the whole story.
+ *
+ * Hollow means blocked and solid means allowed. Two rows of the same twelve
+ * marks: what should have happened, and what did. The correct answer was zero.
+ *
+ * The row the piece is about carries full ink. The reference row is held back,
+ * the same convention the other figures here use.
+ */
+interface Props {
+  variant?: "hero" | "thumb";
+}
+
+const { variant = "hero" } = Astro.props;
+const thumb = variant === "thumb";
+
+const N = 12;
+const PASSED = 9;
+
+const x0 = thumb ? 20 : 300;
+const x1 = thumb ? 380 : 1012;
+const cell = (x1 - x0) / N;
+const markW = thumb ? 22 : 46;
+const markH = thumb ? 44 : 64;
+
+const rowA = thumb ? 58 : 132;
+const rowB = thumb ? 122 : 268;
+
+// Labels sit on the optical centre of the mark rather than its true middle,
+// which is the same offset the bar figures use.
+const base = (y: number) => y + markH * 0.66;
+
+const marks = Array.from({ length: N }, (_, i) => x0 + i * cell);
+---
+
+<svg
+  viewBox={thumb ? "0 0 400 216" : "0 0 1200 460"}
+  role="img"
+  aria-label="Twelve concurrent requests against a free message cap that was already spent. Zero should have been allowed. Nine were."
+  xmlns="http://www.w3.org/2000/svg"
+  class="dg"
+>
+  {
+    !thumb && (
+      <>
+        <text class="dg-cap" x="60" y="58">
+          12 CONCURRENT REQUESTS, CAP ALREADY SPENT
+        </text>
+        <text class="dg-cap dg-end" x="1140" y="58">
+          COUNTER READ 10 OF 10
+        </text>
+        <line class="dg-rule" x1="60" y1="80" x2="1140" y2="80" />
+      </>
+    )
+  }
+
+  {/* what the cap says: none of them */}
+  {
+    marks.map((x) => (
+      <rect
+        class="dg-open"
+        x={x}
+        y={rowA}
+        width={markW}
+        height={markH}
+        rx="3"
+      />
+    ))
+  }
+
+  {/* what the gate did */}
+  {
+    marks.map((x, i) =>
+      i < PASSED ? (
+        <rect x={x} y={rowB} width={markW} height={markH} rx="3" fill="currentColor" />
+      ) : (
+        <rect class="dg-open" x={x} y={rowB} width={markW} height={markH} rx="3" />
+      ),
+    )
+  }
+
+  {
+    !thumb && (
+      <>
+        <text class="dg-lbl dg-end" x="280" y={base(rowA)}>
+          expected
+        </text>
+        <text class="dg-lbl dg-end dg-on" x="280" y={base(rowB)}>
+          actual
+        </text>
+
+        <text class="dg-val" x="1030" y={base(rowA)}>
+          0 allowed
+        </text>
+        <text class="dg-val dg-on" x="1030" y={base(rowB)}>
+          9 allowed
+        </text>
+
+        <line class="dg-rule" x1="60" y1="412" x2="1140" y2="412" />
+        <text class="dg-cap" x="60" y="440">
+          THE RETRY RETURNED EARLY AND LEFT THE PREVIOUS ATTEMPT'S ANSWER BEHIND
+        </text>
+      </>
+    )
+  }
+</svg>
+
+<style>
+  .dg {
+    display: block;
+    width: 100%;
+    height: auto;
+    color: var(--fg);
+  }
+
+  .dg text {
+    font-family: var(--mono);
+    fill: currentColor;
+  }
+
+  .dg-cap {
+    font-size: 15px;
+    letter-spacing: 0.11em;
+    opacity: 0.5;
+  }
+
+  .dg-lbl {
+    font-size: 21px;
+    opacity: 0.5;
+  }
+
+  .dg-val {
+    font-size: 18px;
+    opacity: 0.5;
+  }
+
+  .dg-on {
+    opacity: 1;
+  }
+
+  .dg-end {
+    text-anchor: end;
+  }
+
+  /* blocked. an outline reads as a slot that stayed empty */
+  .dg-open {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    opacity: 0.3;
+  }
+
+  .dg-rule {
+    stroke: currentColor;
+    stroke-width: 1;
+    opacity: 0.18;
+  }
+</style>
