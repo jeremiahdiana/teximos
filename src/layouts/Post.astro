@@ -1,26 +1,64 @@
 ---
 import Base from "./Base.astro";
 import FormattedDate from "../components/FormattedDate.astro";
+import { getDiagram } from "../components/diagrams";
+import { AUTHOR } from "../consts";
 
 interface Props {
   title: string;
   description: string;
   date: Date;
   topic: string;
+  diagram?: string;
 }
 
-const { title, description, date, topic } = Astro.props;
+const { title, description, date, topic, diagram } = Astro.props;
+const Hero = getDiagram(diagram) as any;
 ---
 
-<Base title={title} description={description}>
-  <article class="post">
-    <div class="shell">
-      <div class="post-header">
-        <span class="kicker">{topic}</span>
-        <h1>{title}</h1>
-        <div class="post-meta"><FormattedDate date={date} /></div>
+<Base title={title} description={description} bare>
+  <article>
+    {
+      Hero && (
+        <div class="hero">
+          <div class="hero-inner">
+            {/*
+              SVG text scales with the viewBox, so the labelled variant drops to
+              about 5px of type on a phone. The stripped variant is served
+              instead, where the shapes still carry the comparison.
+            */}
+            <div class="art-wide">
+              <Hero variant="hero" />
+            </div>
+            <div class="art-narrow">
+              <Hero variant="thumb" />
+            </div>
+          </div>
+        </div>
+      )
+    }
+
+    <div class="shell shell-article">
+      <div class="article-head">
+        <div>
+          <span class="byline">{AUTHOR.name}</span>
+          <h1>{title}</h1>
+          <p class="deck">{description}</p>
+        </div>
+
+        <aside class="metabox">
+          <div class="row">
+            <span class="k">Topic</span>
+            <span class="v">{topic}</span>
+          </div>
+          <div class="row">
+            <span class="k">Published</span>
+            <span class="v"><FormattedDate date={date} /></span>
+          </div>
+        </aside>
       </div>
-      <div class="prose column">
+
+      <div class="prose article-body">
         <slot />
       </div>
     </div>

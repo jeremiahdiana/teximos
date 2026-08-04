@@ -9,6 +9,9 @@ const blog = defineCollection({
     date: z.coerce.date(),
     // The kicker above each headline. Names the subject, not the author.
     topic: z.string().default("Engineering"),
+    // Selects a figure from src/components/diagrams. Unknown or absent just
+    // means the piece runs without artwork.
+    diagram: z.string().optional(),
     draft: z.boolean().default(false),
   }),
 });

@@ -10,13 +10,16 @@
  * ------------------------------------------------------------------------- */
 
 :root {
-  --bg: #fcfcfb;
+  /* paper, not screen white. the warmer grey ground is most of what separates
+     a periodical from an application shell */
+  --bg: #f3f3f0;
+  --sunk: #eaeae5;
   --fg: #16161a;
-  --muted: #6e6e78;
-  --rule: #e2e2dc;
-  --rule-soft: #eeeeea;
-  --code-bg: #f4f4f0;
-  --link-rule: #c4c4bd;
+  --muted: #6b6b74;
+  --rule: #dcdcd4;
+  --rule-soft: #e6e6df;
+  --code-bg: #eaeae5;
+  --link-rule: #bebeb5;
 
   --serif: "Newsreader Variable", Iowan Old Style, Charter, Georgia, serif;
   --mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo,
@@ -30,6 +33,7 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #0d0d0f;
+    --sunk: #131317;
     --fg: #e8e8ea;
     --muted: #86868f;
     --rule: #26262c;
@@ -41,6 +45,7 @@
 
 :root[data-theme="dark"] {
   --bg: #0d0d0f;
+  --sunk: #131317;
   --fg: #e8e8ea;
   --muted: #86868f;
   --rule: #26262c;
@@ -103,6 +108,15 @@ a:hover {
   width: 100%;
 }
 
+/*
+ * Articles run in a narrower shell than the index. At the index width the
+ * 38rem reading column takes only half the page and the rail reads as dead
+ * space rather than as a margin.
+ */
+.shell-article {
+  max-width: 62rem;
+}
+
 /* the narrow reading column, for running prose only */
 .column {
   max-width: var(--measure);
@@ -117,50 +131,64 @@ a:hover {
   display: block;
 }
 
-/* ---------- header ---------- */
+/* ---------- utility bar and centred masthead ---------- */
 
-.site-header {
+.utility {
   border-bottom: 1px solid var(--rule);
 }
 
-.site-header .bar {
-  display: flex;
-  align-items: center;
-  gap: 0.55rem;
-  height: 4rem;
-}
-
-.wordmark {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  border-bottom: none;
-  font-size: 1.25rem;
-  font-weight: 500;
-  letter-spacing: -0.015em;
-  line-height: 1;
-}
-
-.site-header nav {
-  margin-left: auto;
+.utility .bar {
   display: flex;
   align-items: center;
   gap: 1.5rem;
+  height: 2.75rem;
   font-family: var(--mono);
   font-size: 0.6875rem;
   letter-spacing: 0.09em;
   text-transform: uppercase;
 }
 
-.site-header nav a,
+.utility .spacer {
+  flex: 1;
+}
+
+.u-link,
 .themetoggle {
   color: var(--muted);
   border-bottom: none;
 }
 
-.site-header nav a:hover,
+.u-link:hover,
 .themetoggle:hover {
   color: var(--fg);
+}
+
+/*
+ * The masthead is centred, which is the whole point. A left aligned wordmark
+ * beside a nav is the single most application-like thing a page can do, and
+ * this site is a periodical.
+ */
+.masthead {
+  display: flex;
+  justify-content: center;
+  padding: 3rem 1.5rem 2.75rem;
+  border-bottom: 2px solid var(--fg);
+}
+
+.masthead-bare {
+  border-bottom: 0;
+  padding-bottom: 2rem;
+}
+
+.wordmark {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  border-bottom: none;
+  font-size: 2.5rem;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1;
 }
 
 .themetoggle {
@@ -217,26 +245,26 @@ a:hover {
   word-break: break-all;
 }
 
-/* ---------- masthead ---------- */
+/* ---------- the statement under the masthead ---------- */
 
-.masthead {
-  padding: 4.5rem 0 3.5rem;
+.statement {
+  padding: 3.25rem 0 3rem;
   border-bottom: 1px solid var(--rule);
 }
 
-.masthead p {
+.statement p {
   margin: 0.9rem 0 0;
-  font-size: 1.375rem;
-  line-height: 1.45;
+  font-size: 1.4375rem;
+  line-height: 1.42;
   max-width: 34rem;
   color: var(--fg);
-  letter-spacing: -0.011em;
+  letter-spacing: -0.014em;
 }
 
-.masthead .sub {
+.statement .sub {
   font-size: 1rem;
   color: var(--muted);
-  max-width: 30rem;
+  max-width: 32rem;
   margin-top: 1rem;
   line-height: 1.6;
 }
@@ -245,6 +273,29 @@ a:hover {
 
 .lead-section {
   border-bottom: 1px solid var(--rule);
+}
+
+/* the cover: the lead article's figure, run big above its headline */
+.lead-art {
+  display: block;
+  border-bottom: none;
+  padding: 2.75rem 0 0.5rem;
+}
+
+.art-wide {
+  display: block;
+}
+
+.art-narrow {
+  display: none;
+}
+
+/* the preview image on each card in the grid */
+.card-art {
+  display: block;
+  background: var(--sunk);
+  padding: 0.9rem 1rem;
+  margin-bottom: 1rem;
 }
 
 .lead {
@@ -351,28 +402,119 @@ a:hover {
   padding: 3rem 0 5rem;
 }
 
-/* ---------- post ---------- */
+/* ---------- article ---------- */
 
-.post {
-  padding: 4rem 0 5rem;
+/* full bleed hero, edge to edge, with a heavy rule closing it */
+.hero {
+  border-bottom: 2px solid var(--fg);
+  background: var(--sunk);
 }
 
-.post-header {
+.hero-inner {
+  max-width: 96rem;
+  margin: 0 auto;
+  padding: 2.5rem var(--gutter) 2rem;
+}
+
+.article-head {
+  display: grid;
+  grid-template-columns: 1fr 17rem;
+  gap: 4rem;
+  align-items: start;
+  padding: 3rem 0 2.5rem;
+  border-bottom: 1px solid var(--rule);
   margin-bottom: 3rem;
-  max-width: 44rem;
 }
 
-.post-header h1 {
-  font-size: clamp(2rem, 4vw, 2.875rem);
-  margin: 0.9rem 0 1.1rem;
-  letter-spacing: -0.03em;
-}
-
-.post-meta {
+.byline {
   font-family: var(--mono);
   font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  display: inline-block;
+  padding-bottom: 0.45rem;
+  border-bottom: 1px solid var(--fg);
+}
+
+.article-head h1 {
+  font-size: clamp(2rem, 4.4vw, 3rem);
+  margin: 1.1rem 0 1rem;
+  letter-spacing: -0.03em;
+  max-width: 20ch;
+}
+
+.deck {
+  margin: 0;
+  font-size: 1.1875rem;
+  line-height: 1.55;
   color: var(--muted);
+  max-width: 42ch;
+}
+
+/* the boxed metadata, ruled like a print colophon */
+.metabox {
+  border: 1px solid var(--rule);
+  font-family: var(--mono);
+  font-size: 0.6875rem;
   letter-spacing: 0.05em;
+}
+
+.metabox .row {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.6rem 0.85rem;
+}
+
+.metabox .row + .row {
+  border-top: 1px solid var(--rule);
+}
+
+.metabox .k {
+  color: var(--muted);
+  text-transform: uppercase;
+  width: 5.25rem;
+  flex: none;
+}
+
+/* body sits left with a rail to its right for pull quotes */
+.article-body {
+  max-width: 38rem;
+  padding-bottom: 5rem;
+}
+
+.article-body::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+.pull {
+  float: right;
+  width: 15rem;
+  margin: 0.4rem -19rem 1.4rem 3rem;
+  font-size: 1.25rem;
+  line-height: 1.4;
+  letter-spacing: -0.015em;
+  color: var(--fg);
+  padding: 1.1rem 0;
+  border-top: 1px solid var(--fg);
+  border-bottom: 1px solid var(--fg);
+}
+
+.figure {
+  margin: 2.5rem 0;
+}
+
+.figure-wide {
+  margin-right: -19rem;
+}
+
+.figure figcaption {
+  margin-top: 0.7rem;
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.05em;
+  color: var(--muted);
 }
 
 .prose > * + * {
@@ -579,10 +721,41 @@ a:hover {
     --gutter: 1.5rem;
   }
   .lead,
-  .colophon .inner {
+  .colophon .inner,
+  .article-head {
     grid-template-columns: 1fr;
     gap: 1.5rem;
     padding: 2.5rem 0;
+  }
+  /* no rail on a phone, so the pull quote becomes a full width break */
+  .pull {
+    float: none;
+    width: auto;
+    margin: 1.75rem 0;
+  }
+  .figure-wide {
+    margin-right: 0;
+  }
+  .wordmark {
+    font-size: 1.875rem;
+  }
+  .masthead {
+    padding: 2rem 1.5rem 1.75rem;
+  }
+  .hero-inner {
+    padding: 1.5rem var(--gutter) 1.25rem;
+  }
+  .utility .bar {
+    gap: 1rem;
+  }
+  .themetoggle {
+    padding-left: 1rem;
+  }
+  .art-wide {
+    display: none;
+  }
+  .art-narrow {
+    display: block;
   }
   .lead .aside {
     padding-top: 0;

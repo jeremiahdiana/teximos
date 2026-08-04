@@ -1,0 +1,14 @@
+---
+interface Props {
+  caption?: string;
+  /** Break out past the reading column, up to the full content width. */
+  wide?: boolean;
+}
+
+const { caption, wide = false } = Astro.props;
+---
+
+<figure class:list={["figure", wide && "figure-wide"]}>
+  <slot />
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>

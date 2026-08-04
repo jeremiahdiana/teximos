@@ -10,9 +10,11 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 interface Props {
   title?: string;
   description?: string;
+  /** Articles run their own hero, so the masthead drops its bottom rule. */
+  bare?: boolean;
 }
 
-const { title, description = SITE_DESCRIPTION } = Astro.props;
+const { title, description = SITE_DESCRIPTION, bare = false } = Astro.props;
 const pageTitle = title ? `${title} / ${SITE_TITLE}` : SITE_TITLE;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const year = new Date().getFullYear();
@@ -59,29 +61,22 @@ const year = new Date().getFullYear();
   </head>
 
   <body>
-    <header class="site-header">
+    <div class="utility">
       <div class="shell">
         <div class="bar">
-          <a class="wordmark" href="/">
-            <Logo size={22} />
-            <span>teximos</span>
-          </a>
-          <nav>
-            <a href="/about">About</a>
-            <a href="/rss.xml">RSS</a>
-            <button
-              class="themetoggle"
-              id="theme-toggle"
-              type="button"
-              aria-live="polite">System</button
-            >
-          </nav>
+          <a class="u-link" href="/rss.xml">Subscribe</a>
+          <span class="spacer"></span>
+          <a class="u-link" href="/about">About</a>
+          <button
+            class="themetoggle"
+            id="theme-toggle"
+            type="button"
+            aria-live="polite">System</button
+          >
         </div>
       </div>
-    </header>
+    </div>
 
-    {/* Sits here rather than at the end of body so the label is correct
-        before the header is ever painted. */}
     <script is:inline>
       (function () {
         var btn = document.getElementById("theme-toggle");
@@ -118,6 +113,13 @@ const year = new Date().getFullYear();
         paint();
       })();
     </script>
+
+    <header class:list={["masthead", bare && "masthead-bare"]}>
+      <a class="wordmark" href="/" aria-label="Teximos, home">
+        <Logo size={34} />
+        <span>teximos</span>
+      </a>
+    </header>
 
     <main>
       <slot />

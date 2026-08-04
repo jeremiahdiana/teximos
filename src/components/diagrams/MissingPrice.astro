@@ -1,0 +1,175 @@
+---
+/**
+ * The 27x billing incident, as a figure.
+ *
+ * Form: comparing magnitudes across three named models, so horizontal bars.
+ * The story is really one number (27 against 1), so the treatment is emphasis
+ * rather than three equal categories: the offending row sits at full ink and
+ * the two reference rows are held back. Monochrome throughout, so magnitude is
+ * carried by length, which is the correct channel for it anyway.
+ *
+ * The hollow extension on the middle bar is the whole point. Solid ink is what
+ * the model actually cost. The outline is what the meter charged for it.
+ */
+interface Props {
+  variant?: "hero" | "thumb";
+}
+
+const { variant = "hero" } = Astro.props;
+const thumb = variant === "thumb";
+
+// 0 to 28x maps across the plot. Bars start at x0 and the scale is linear.
+// The plot stops short of the right rule so the value labels have somewhere to
+// live. Running it to 1140 clipped "27x billed" off the edge of the viewBox.
+const x0 = thumb ? 20 : 300;
+const x1 = thumb ? 380 : 1012;
+const per = (x1 - x0) / 28;
+const w = (mult: number) => mult * per;
+
+const rows = thumb
+  ? [
+      { y: 26, len: 1, muted: true },
+      { y: 86, len: 1, ghost: 27 },
+      { y: 146, len: 27, muted: true },
+    ]
+  : [
+      { y: 132, len: 1, muted: true },
+      { y: 236, len: 1, ghost: 27 },
+      { y: 340, len: 27, muted: true },
+    ];
+
+const H = thumb ? 44 : 56;
+const r = 4;
+
+/** Bar with the data end rounded and the baseline end square. */
+function bar(len: number, y: number) {
+  const xe = x0 + w(len);
+  const e = Math.min(r, Math.max(0, xe - x0));
+  return `M${x0} ${y} L${xe - e} ${y} Q${xe} ${y} ${xe} ${y + e} L${xe} ${y + H - e} Q${xe} ${y + H} ${xe - e} ${y + H} L${x0} ${y + H} Z`;
+}
+---
+
+<svg
+  viewBox={thumb ? "0 0 400 216" : "0 0 1200 460"}
+  role="img"
+  aria-label="Cost weight per request. gemini-3.5-flash sits at 1x. gpt-4o-mini cost 1x and was billed at 27x. claude-fable-5 genuinely costs 27x."
+  xmlns="http://www.w3.org/2000/svg"
+  class={thumb ? "dg dg-thumb" : "dg"}
+>
+  {
+    !thumb && (
+      <>
+        <text class="dg-cap" x="60" y="58">
+          COST WEIGHT PER REQUEST
+        </text>
+        <text class="dg-cap dg-end" x="1140" y="58">
+          1X = GEMINI-3.5-FLASH
+        </text>
+        <line class="dg-rule" x1="60" y1="80" x2="1140" y2="80" />
+      </>
+    )
+  }
+
+  {
+    rows.map((row) => (
+      <>
+        <path
+          d={bar(row.len, row.y)}
+          fill="currentColor"
+          opacity={row.muted ? 0.28 : 1}
+        />
+        {row.ghost && (
+          <path
+            d={bar(row.ghost, row.y)}
+            fill="none"
+            stroke="currentColor"
+            stroke-width={thumb ? 1.5 : 2}
+            opacity="0.55"
+          />
+        )}
+      </>
+    ))
+  }
+
+  {
+    !thumb && (
+      <>
+        <text class="dg-lbl dg-end" x="280" y="168">
+          gemini-3.5-flash
+        </text>
+        <text class="dg-lbl dg-end dg-on" x="280" y="272">
+          gpt-4o-mini
+        </text>
+        <text class="dg-lbl dg-end" x="280" y="376">
+          claude-fable-5
+        </text>
+
+        <text class="dg-val" x={x0 + w(1) + 18} y="168">
+          1x
+        </text>
+        <text class="dg-val dg-on" x={x0 + w(1) + 18} y="262">
+          1x actual
+        </text>
+        <text class="dg-val dg-on" x={x0 + w(27) + 18} y="292">
+          27x billed
+        </text>
+        <text class="dg-val" x={x0 + w(27) + 18} y="376">
+          27x
+        </text>
+
+        <line class="dg-rule" x1="60" y1="412" x2="1140" y2="412" />
+        <text class="dg-cap" x="60" y="440">
+          ABSENT FROM PRICES, SO COSTWEIGHT() FELL THROUGH TO UNKNOWN_WEIGHT
+        </text>
+      </>
+    )
+  }
+</svg>
+
+<style>
+  .dg {
+    display: block;
+    width: 100%;
+    height: auto;
+    color: var(--fg);
+  }
+
+  /* Mono for every label. The site's other face is a serif, and a serif on a
+     figure reads as decoration rather than as information. */
+  .dg text {
+    font-family: var(--mono);
+    fill: currentColor;
+  }
+
+  .dg-cap {
+    font-size: 15px;
+    letter-spacing: 0.11em;
+    opacity: 0.5;
+  }
+
+  .dg-lbl {
+    font-size: 21px;
+    opacity: 0.5;
+  }
+
+  .dg-val {
+    font-size: 18px;
+    opacity: 0.5;
+  }
+
+  /* the row the article is about */
+  .dg-on {
+    opacity: 1;
+  }
+
+  .dg-end {
+    text-anchor: end;
+  }
+
+  /* hairline, solid. a dashed rule reads as a threshold rather than as chrome */
+  .dg-rule {
+    stroke: currentColor;
+    stroke-width: 1;
+    opacity: 0.18;
+  }
+</style>

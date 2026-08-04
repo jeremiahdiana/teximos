@@ -3,7 +3,10 @@ title: "A missing price billed every image at 27x"
 description: "The cheapest model we served was absent from the pricing table, so it fell through to the fallback weight. Every image request in production landed on it."
 date: 2026-08-04
 topic: Metering and billing
+diagram: MissingPrice
 ---
+
+import Pull from "../../components/Pull.astro";
 
 A user asked one question about their screen. The app told them they had used
 43 percent of their daily allowance. They asked a second one and got locked
@@ -56,6 +59,11 @@ Production's `resolveChatModel` forces every image request onto `gpt-4o-mini`.
 Not as a fallback. As the rule. Screenshots, attached photos and anything
 pasted into the composer all land there.
 
+<Pull>
+The model with the wrong price was not an obscure one. It was the only model an
+entire feature could reach.
+</Pull>
+
 So the model with the wrong price was not an obscure one. It was the only model
 an entire feature could reach.
 
@@ -77,8 +85,10 @@ The router chooses it for them.
 
 That is the part worth keeping:
 
-> A guard that only checks the models a user can pick will miss every model a
-> request can land on.
+<Pull>
+A guard that only checks the models a user can pick will miss every model a
+request can land on.
+</Pull>
 
 The check was not weak. It was pointed at the wrong set. It gave a green tick
 for a question nobody had asked, and the green tick is what made it dangerous,

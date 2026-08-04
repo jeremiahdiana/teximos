@@ -1,0 +1,12 @@
+---
+/**
+ * A pull quote in the right rail.
+ *
+ * Floated rather than grid placed on purpose. A grid cell in a second column
+ * would take a whole row, leaving a hole in the prose beside it. A float with
+ * a negative right margin sits in the rail and lets the text flow past, which
+ * is exactly what the print version of this does.
+ */
+---
+
+<aside class="pull"><slot /></aside>
