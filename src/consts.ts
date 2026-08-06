@@ -15,6 +15,16 @@ export const SITE_STATEMENT =
 export const SITE_BLURB =
   "Model releases, product decisions, opinions with the reasoning left in and real incidents with the code attached. Written so that anyone who works near software can read it, not only the people who wrote it.";
 
+// Email newsletter. Buttondown's embed is a plain form POST, so signup adds
+// real subscribers with zero JavaScript. Swap `user` for the real account and
+// both the /subscribe page and the homepage block pick it up.
+export const NEWSLETTER = {
+  user: "teximos",
+  get action() {
+    return `https://buttondown.email/api/emails/embed-subscribe/${this.user}`;
+  },
+};
+
 export const AUTHOR = {
   name: "Jeremiah Diana",
   // Used for the Person schema on /about. Empty entries are dropped.
@@ -22,5 +32,6 @@ export const AUTHOR = {
   links: [
     { label: "GitHub", href: "https://github.com/jeremiahdiana/teximos" },
     { label: "LinkedIn", href: "https://www.linkedin.com/in/jerehm/" },
+    { label: "Instagram", href: "https://www.instagram.com/jerehm/" },
   ],
 };

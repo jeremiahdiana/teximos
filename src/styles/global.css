@@ -768,6 +768,82 @@ a:hover {
   flex: none;
 }
 
+/* ---------- subscribe form ---------- */
+
+.subscribe-form {
+  display: flex;
+  gap: 0.5rem;
+  max-width: var(--measure);
+  margin: 1.5rem 0 0;
+}
+
+.subscribe-form input[type="email"] {
+  flex: 1 1 auto;
+  min-width: 0;
+  font: inherit;
+  font-size: 1rem;
+  color: var(--fg);
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  border-radius: 0;
+  padding: 0.7rem 0.85rem;
+}
+
+.subscribe-form input[type="email"]::placeholder {
+  color: var(--muted);
+}
+
+.subscribe-form input[type="email"]:focus {
+  outline: none;
+  border-color: var(--fg);
+}
+
+.subscribe-form button {
+  flex: none;
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+  letter-spacing: 0.02em;
+  color: var(--bg);
+  background: var(--fg);
+  border: 1px solid var(--fg);
+  border-radius: 0;
+  padding: 0 1.25rem;
+  cursor: pointer;
+}
+
+.subscribe-form button:hover {
+  opacity: 0.85;
+}
+
+@media (max-width: 32rem) {
+  .subscribe-form {
+    flex-direction: column;
+  }
+  .subscribe-form button {
+    padding: 0.7rem 1.25rem;
+  }
+}
+
+/* the compact variant in the homepage colophon */
+.colophon .feed-note {
+  margin: 0.5rem 0 0;
+  font-size: 0.6875rem;
+  line-height: 1.7;
+  color: var(--muted);
+  max-width: none;
+}
+
+.colophon .feed .subscribe-form {
+  margin: 0.9rem 0 0;
+  max-width: none;
+}
+
+.colophon .feed-rss {
+  margin-top: 0.9rem;
+  border-bottom: none;
+  word-break: normal;
+}
+
 /* ---------- footer ---------- */
 
 .site-footer {

@@ -1,0 +1,44 @@
+---
+import Base from "../layouts/Base.astro";
+import { NEWSLETTER } from "../consts";
+
+const action = NEWSLETTER.action;
+---
+
+<Base title="Subscribe" description="Get each new piece from Teximos by email, or follow the RSS feed.">
+  <div class="page">
+    <div class="shell">
+      <span class="kicker">Subscribe</span>
+      <h1>Get each new piece</h1>
+
+      <div class="prose column">
+        <p>
+          Teximos publishes when there is something in technology worth
+          explaining properly. Leave an email and each new piece arrives when
+          it is out. Nothing else is sent, and one link unsubscribes.
+        </p>
+
+        <form class="subscribe-form" action={action} method="post" target="_blank">
+          <input type="hidden" name="embed" value="1" />
+          <input
+            type="email"
+            name="email"
+            inputmode="email"
+            autocomplete="email"
+            placeholder="you@example.com"
+            aria-label="Email address"
+            required
+          />
+          <button type="submit">Subscribe</button>
+        </form>
+
+        <h2>Or use the feed</h2>
+        <p>
+          If you read with an RSS reader, the full feed lives at
+          {" "}<a href="/rss.xml">teximos.com/rss.xml</a>. It carries every
+          piece, no email required.
+        </p>
+      </div>
+    </div>
+  </div>
+</Base>
