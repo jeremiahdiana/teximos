@@ -1,0 +1,116 @@
+---
+title: "The universe is expanding too fast, and AI is being handed the tape measure"
+description: "Two ways of measuring how fast the cosmos grows have disagreed for a decade. The telescopes have ruled out a mistake. Now machine learning is being pointed at the messiest part of the problem."
+date: 2026-08-06T12:00:00Z
+topic: "Cosmology"
+cover: ../../assets/blog/cosmology-hero.jpg
+coverAlt: "The spiral galaxy NGC 5468, imaged by the Hubble and James Webb space telescopes, its blue arms studded with star-forming regions against deep space."
+---
+
+import Pull from "../../components/Pull.astro";
+
+There is a number that describes how fast the universe is getting bigger. It is
+called the Hubble constant, and for nearly a century measuring it has been one
+of the quiet obsessions of physics. The awkward part is that we now have two
+good ways to measure it, and they do not agree.
+
+One way looks outward at exploding stars in nearby galaxies and works out how
+far away they are. It lands near 73 kilometres per second per megaparsec, which
+is a physicist's way of saying that for every stretch of space about three
+million light-years across, the gap is opening at roughly 73 kilometres a
+second. The other way looks backward at the faint afterglow of the Big Bang, the
+oldest light there is, and predicts what today's expansion rate should be. That
+method lands near 67.
+
+Two numbers, about 8 percent apart, each measured with enormous care. For years
+the comfortable assumption was that one of them had a subtle error hiding in it,
+and that better instruments would quietly pull the two together.
+
+## The instruments got better, and the gap stayed
+
+Better instruments arrived. The James Webb Space Telescope was pointed at the
+same nearby galaxies that Hubble had used, including NGC 5468, the spiral in the
+image above, about 130 million light-years away. Webb re-measured roughly a
+thousand of the pulsing stars that anchor the nearby end of the distance scale.
+If the older Hubble figure had been wrong because of crowded or dusty starfields,
+this was where the error would show.
+
+It did not show. The two telescopes agreed with each other, which means the
+local measurement of 73 is solid, and the disagreement with the early-universe
+prediction of 67 is real.
+
+<Pull>
+"We can rule out a measurement error as the cause of the Hubble Tension with
+very high confidence."
+</Pull>
+
+That is Adam Riess of Johns Hopkins, who shared a Nobel Prize for the discovery
+that the expansion is speeding up, [describing the result to
+NASA](https://science.nasa.gov/missions/hubble/nasas-webb-hubble-telescopes-affirm-universes-expansion-rate-puzzle-persists/).
+His blunter version of the same thought: "what remains is the real and exciting
+possibility we have misunderstood the universe." When two careful measurements
+refuse to meet and the measurements are not the problem, the problem is
+somewhere in the physics between them.
+
+## Why this is a data problem before it is a physics problem
+
+Here is the part that turns a cosmology story into a computing one. The local
+measurement is built like a ladder. The bottom rung uses stars whose true
+brightness we know, so their faintness tells us their distance. Those calibrate
+the next rung, a kind of exploding star called a Type Ia supernova, which is
+bright enough to be seen across enormous distances and which is supposed to
+detonate with a standard brightness every time.
+
+Supposed to. In practice a supernova is not a clean laboratory light. Its
+apparent brightness is smeared by the dust it sits behind, by the chemistry of
+the galaxy that hosted it, by the exact way that particular star tore itself
+apart. Every one of those effects is a small correction, and the final number
+is only as trustworthy as the corrections. This is exactly the kind of task,
+thousands of noisy images each needing a physically reasonable adjustment, where
+machine learning has started to earn its place.
+
+## What the models are actually being asked to do
+
+Several groups are now bringing that toolkit to the messiest rung of the ladder.
+One line of work trains neural networks to model the environment around each
+Type Ia supernova, so the correction for dust and host galaxy is learned from
+data rather than hand-tuned. Another looks ahead to a rarer prize: supernovae
+whose light is bent and split into several images by the gravity of a galaxy in
+front of them. The tiny delays between those duplicate images are a direct
+handle on the expansion rate, with no ladder at all.
+
+There are almost none of these gravitationally lensed supernovae on record, so
+researchers are [training the models on simulations
+first](https://ar5iv.labs.arxiv.org/html/2504.10553), generating tens of
+thousands of synthetic lensed events, then preparing to turn the trained network
+loose on real data from the Nancy Grace Roman Space Telescope once it is
+observing. A July 2026 study went the other direction and squeezed the existing
+supernova catalogue harder, reporting a [Hubble constant to about 1.1 percent
+precision](https://arxiv.org/html/2607.24443) from a re-calibrated dataset.
+
+<Pull>
+The machine is not here to find the answer. It is here to remove every excuse
+the answer might have had.
+</Pull>
+
+## The stakes, stated plainly
+
+It would be a tidy ending if artificial intelligence swept in and reconciled the
+two numbers. That is not the likely outcome, and it is worth being honest about
+why. If the models tighten the local measurement and the gap closes, the last
+decade was a story about stubborn measurement noise, which is a relief and a
+little dull. If the models tighten the measurement and the gap holds, the
+pressure moves off the astronomers and onto the theory of the universe itself.
+
+That second outcome is the one physicists half-want and half-dread. It would
+mean the standard model of cosmology is missing something between the first
+light and the present day, some form of energy or physics we have not accounted
+for. The value of the machine learning here is not that it will pick a side. It
+is that it can strip away the ordinary explanations at a scale no team of people
+could, until the only thing left standing is either a boring correction or a
+genuinely new piece of the universe.
+
+For once, the interesting result is the one where the tool fails to make the
+problem go away.
+
+*Image: NASA, ESA, CSA, STScI.*

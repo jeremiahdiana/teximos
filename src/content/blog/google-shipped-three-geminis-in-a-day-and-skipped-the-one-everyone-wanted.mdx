@@ -1,0 +1,88 @@
+---
+title: "Google shipped three Geminis in a day, and skipped the one everyone wanted"
+description: "No new flagship. Instead a cheaper workhorse, the fastest small model yet and a security model locked to governments. The most interesting AI release of the summer was not about intelligence. It was about price."
+date: 2026-08-06T08:00:00Z
+topic: "Model releases"
+cover: ../../assets/blog/gemini-release-hero.jpg
+coverAlt: "Screenshot of Google's announcement page, headlined 'Introducing Gemini 3.6 Flash, 3.5 Flash-Lite, and 3.5 Flash Cyber', dated 21 July 2026."
+---
+
+import Pull from "../../components/Pull.astro";
+
+On 21 July, Google [announced three new Gemini
+models](https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-6-flash-3-5-flash-lite-3-5-flash-cyber/)
+at once. The one the industry had been waiting for, a new top-of-the-line Gemini
+3.5 Pro to trade blows with the best from OpenAI and Anthropic, was not among
+them. It is still in testing with partners. The next flagship after that, Gemini
+4, is described only as having started its "most ambitious pre-training run
+yet," which is a polite way of saying it is months out.
+
+So the headline release was not the smartest model. It was the cheap one getting
+cheaper, and that turns out to be the more revealing story.
+
+## The three that shipped
+
+The centrepiece is Gemini 3.6 Flash, which Google calls its workhorse. It is not
+meant to top a leaderboard. It is meant to be the model you run millions of
+times a day without thinking about the bill. It uses up to 17 percent fewer
+tokens to say the same thing as the model it replaces, and it posts as much as a
+65 percent improvement on an agentic coding benchmark. Priced at 1.50 dollars
+per million input tokens and 7.50 dollars per million output.
+
+Below it sits Gemini 3.5 Flash-Lite, tuned for raw speed at around 350 output
+tokens per second, priced at 30 cents in and 2.50 dollars out per million. It is
+built for the high-volume, low-glamour jobs: reading documents, powering the
+search step inside an agent, anything you do at scale where latency and cost
+matter more than brilliance.
+
+The third is the odd one. Gemini 3.5 Flash Cyber is fine-tuned to find and fix
+security vulnerabilities in code, and Google is not selling it to everyone. It
+goes only to governments and trusted partners, delivered through a system called
+CodeMender.
+
+## Read the token count, not the benchmark
+
+The number worth staring at is not the 65 percent. It is the 17 percent fewer
+tokens.
+
+A large model's cost is paid per token, so a model that produces the same answer
+in fewer tokens is, quietly, a price cut. It does not show up as a lower sticker
+price. It shows up on the invoice at the end of the month, when the same volume
+of work costs less because each unit of work is smaller. For anyone running a
+product on top of these models, that is often a bigger deal than a couple of
+points on a benchmark nobody outside the field has heard of.
+
+<Pull>
+The frontier gets the headlines. The workhorse tier gets the invoices.
+</Pull>
+
+This is the shape of the market right now. The race for the single most capable
+model is real and it is loud, but the volume, the traffic that actually runs all
+day, lives in the cheap and fast tier. That is where the current wave of AI
+agents does its work, firing off long chains of small calls. Shaving the cost of
+each call is what makes an agent that runs continuously affordable at all. Google
+releasing a workhorse before a flagship is a statement about where it thinks the
+money is.
+
+## The security model is a policy decision wearing a model's clothes
+
+Flash Cyber is the most interesting release precisely because of who cannot have
+it. A model good at finding software vulnerabilities is dual-use by nature. The
+same skill that patches a hole can be pointed at finding holes to exploit, which
+is why Google is keeping it behind a gate rather than putting it on the open
+pricing page.
+
+That is a small preview of a larger question the industry has not resolved. As
+models get genuinely good at offensive-security tasks, the decision about who is
+allowed to run them stops being a pricing choice and becomes something closer to
+export control. Releasing a restricted security model quietly, in the same
+announcement as two commodity ones, is a way of establishing that posture before
+it becomes a fight.
+
+None of the three models will win an argument at a dinner party about whether AI
+is getting smarter. That was not the point of the day. The point was that the
+part of this technology that already touches the most software got cheaper, one
+part of it got fenced off, and the flagship everyone wanted to talk about was
+left to wait its turn.
+
+*Screenshot: Google.*
