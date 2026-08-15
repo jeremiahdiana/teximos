@@ -3,7 +3,13 @@ import { Image } from "astro:assets";
 import Base from "./Base.astro";
 import FormattedDate from "../components/FormattedDate.astro";
 import { getDiagram } from "../components/diagrams";
+import { topicSlug } from "../lib/topics";
 import { AUTHOR } from "../consts";
+
+interface Sibling {
+  slug: string;
+  title: string;
+}
 
 interface Props {
   title: string;
@@ -16,10 +22,23 @@ interface Props {
   coverAlt?: string;
   /** Collection id, which is also the slug the social card is filed under. */
   slug: string;
+  /** The next newer and next older pieces, for the foot navigation. */
+  newer?: Sibling | null;
+  older?: Sibling | null;
 }
 
-const { title, description, date, topic, diagram, cover, coverAlt, slug } =
-  Astro.props;
+const {
+  title,
+  description,
+  date,
+  topic,
+  diagram,
+  cover,
+  coverAlt,
+  slug,
+  newer,
+  older,
+} = Astro.props;
 const Hero = getDiagram(diagram) as any;
 ---
 
@@ -30,7 +49,7 @@ const Hero = getDiagram(diagram) as any;
   type="article"
   image={`/og/${slug}.png`}
 >
-  <article>
+  <article data-pagefind-body>
     {
       cover ? (
         /* A photograph or a screenshot runs edge to edge. Boxing it inside the
@@ -74,7 +93,7 @@ const Hero = getDiagram(diagram) as any;
         <aside class="metabox">
           <div class="row">
             <span class="k">Topic</span>
-            <span class="v">{topic}</span>
+            <a class="v" href={`/topic/${topicSlug(topic)}/`}>{topic}</a>
           </div>
           <div class="row">
             <span class="k">Published</span>
@@ -86,6 +105,29 @@ const Hero = getDiagram(diagram) as any;
       <div class="prose article-body">
         <slot />
       </div>
+
+      {
+        (newer || older) && (
+          <nav class="post-nav" aria-label="More pieces" data-pagefind-ignore>
+            <div class="post-nav-cell">
+              {newer && (
+                <a href={`/blog/${newer.slug}/`}>
+                  <span class="kicker">Newer</span>
+                  <span class="post-nav-title">{newer.title}</span>
+                </a>
+              )}
+            </div>
+            <div class="post-nav-cell post-nav-older">
+              {older && (
+                <a href={`/blog/${older.slug}/`}>
+                  <span class="kicker">Older</span>
+                  <span class="post-nav-title">{older.title}</span>
+                </a>
+              )}
+            </div>
+          </nav>
+        )
+      }
     </div>
   </article>
 </Base>

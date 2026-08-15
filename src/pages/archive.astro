@@ -1,0 +1,65 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../layouts/Base.astro";
+import IndexList from "../components/IndexList.astro";
+import { topicsFromPosts } from "../lib/topics";
+
+const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+
+const topics = topicsFromPosts(posts);
+const count = posts.length;
+---
+
+<Base
+  title="Archive"
+  description="Every piece published, newest first. Browse by subject or search the full text."
+>
+  <div class="page">
+    <div class="shell">
+      <span class="kicker">Archive</span>
+      <h1>Everything, newest first</h1>
+
+      {/*
+        The one page that ships JavaScript. Pagefind indexes the built HTML in a
+        postbuild step, so its script and styles live here and nowhere else, and
+        every article plus the homepage stay free of it. The tags are is:inline
+        because the files do not exist until after the build runs.
+      */}
+      <section class="search" aria-label="Search">
+        <span class="kicker">Search</span>
+        <link rel="stylesheet" href="/pagefind/pagefind-ui.css" />
+        <div id="search"></div>
+        <script src="/pagefind/pagefind-ui.js" is:inline></script>
+        <script is:inline>
+          window.addEventListener("DOMContentLoaded", () => {
+            if (window.PagefindUI) {
+              new window.PagefindUI({
+                element: "#search",
+                showImages: false,
+                showSubResults: true,
+                resetStyles: false,
+              });
+            }
+          });
+        </script>
+      </section>
+
+      {
+        topics.length > 0 && (
+          <nav class="topics" aria-label="Topics">
+            {topics.map((t) => (
+              <a class="chip" href={`/topic/${t.slug}/`}>
+                {t.label}
+              </a>
+            ))}
+          </nav>
+        )
+      }
+
+      <span class="index-count kicker">{count} pieces</span>
+      <IndexList posts={posts} />
+    </div>
+  </div>
+</Base>

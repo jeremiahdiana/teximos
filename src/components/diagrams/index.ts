@@ -1,8 +1,6 @@
 import MissingPrice from "./MissingPrice.astro";
 import WrongBaseline from "./WrongBaseline.astro";
 import TransactionRetry from "./TransactionRetry.astro";
-import SpellingConstraint from "./SpellingConstraint.astro";
-import OrphanSignature from "./OrphanSignature.astro";
 import MissingDoc from "./MissingDoc.astro";
 
 /**
@@ -14,8 +12,6 @@ export const DIAGRAMS: Record<string, unknown> = {
   MissingPrice,
   WrongBaseline,
   TransactionRetry,
-  SpellingConstraint,
-  OrphanSignature,
   MissingDoc,
 };
 

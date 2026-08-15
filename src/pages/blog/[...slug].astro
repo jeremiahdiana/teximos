@@ -3,14 +3,26 @@ import { getCollection, render } from "astro:content";
 import Post from "../../layouts/Post.astro";
 
 export async function getStaticPaths() {
-  const posts = await getCollection("blog", ({ data }) => !data.draft);
-  return posts.map((post) => ({
+  const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
+    (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+  );
+  // Sorted newest-first, so the previous index is the newer piece and the next
+  // is the older one. Nulls at the ends drop the link on that side.
+  return posts.map((post, i) => ({
     params: { slug: post.id },
-    props: { post },
+    props: {
+      post,
+      newer: posts[i - 1]
+        ? { slug: posts[i - 1].id, title: posts[i - 1].data.title }
+        : null,
+      older: posts[i + 1]
+        ? { slug: posts[i + 1].id, title: posts[i + 1].data.title }
+        : null,
+    },
   }));
 }
 
-const { post } = Astro.props;
+const { post, newer, older } = Astro.props;
 const { Content } = await render(post);
 ---
 
@@ -23,6 +35,8 @@ const { Content } = await render(post);
   cover={post.data.cover}
   coverAlt={post.data.coverAlt}
   slug={post.id}
+  newer={newer}
+  older={older}
 >
   <Content />
 </Post>

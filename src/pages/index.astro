@@ -15,8 +15,8 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
  * underneath. Slicing rather than indexing so the page composes at any count.
  */
 const [lead, ...rest] = posts;
-const rail = rest.slice(0, 2);
-const row = rest.slice(2);
+const rail = rest.slice(0, 3);
+const row = rest.slice(3);
 
 // Preview.astro picks between a real cover image and the stripped figure. The
 // reasoning for that choice lives there.
@@ -49,7 +49,7 @@ const row = rest.slice(2);
             </article>
 
             {rail.length > 0 && (
-              <div class="rail">
+              <div class:list={["rail", rail.length === 3 && "rail-3"]}>
                 {rail.map((post) => {
                   return (
                     <article class="rail-item">
@@ -85,7 +85,13 @@ const row = rest.slice(2);
     row.length > 0 && (
       <section class="more">
         <div class="shell">
-          <ul class="grid">
+          <ul
+            class:list={[
+              "grid",
+              row.length === 1 && "grid-1",
+              row.length === 2 && "grid-2",
+            ]}
+          >
             {row.map((post) => {
               return (
                 <li>
@@ -116,7 +122,7 @@ const row = rest.slice(2);
             Published when something in technology is worth explaining
             properly. Set in Newsreader and JetBrains Mono. Built with Astro
             and served from Cloudflare. It ships no JavaScript beyond the
-            theme switch.
+            theme switch. Search runs only on the archive page.
           </p>
         </div>
         <div class="feed">

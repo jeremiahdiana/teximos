@@ -1,0 +1,42 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import IndexList from "../../components/IndexList.astro";
+import { topicsFromPosts, topicSlug } from "../../lib/topics";
+
+export async function getStaticPaths() {
+  const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
+    (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+  );
+  const topics = topicsFromPosts(posts);
+  return topics.map((t) => ({
+    params: { topic: t.slug },
+    props: {
+      label: t.label,
+      posts: posts.filter((p) => topicSlug(p.data.topic) === t.slug),
+    },
+  }));
+}
+
+const { label, posts } = Astro.props;
+const count = posts.length;
+---
+
+<Base
+  title={`${label} on Teximos`}
+  description={`Every piece filed under ${label}, newest first.`}
+>
+  <div class="page">
+    <div class="shell">
+      <span class="kicker">Topic</span>
+      <h1>{label}</h1>
+      <span class="index-count kicker">
+        {count} {count === 1 ? "piece" : "pieces"}
+      </span>
+
+      <IndexList posts={posts} />
+
+      <a class="back-link" href="/archive">Back to the archive</a>
+    </div>
+  </div>
+</Base>

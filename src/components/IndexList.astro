@@ -1,0 +1,37 @@
+---
+import type { CollectionEntry } from "astro:content";
+import FormattedDate from "./FormattedDate.astro";
+import { topicSlug } from "../lib/topics";
+
+/*
+ * One ruled row per piece: title, topic and date. The title and the topic are
+ * two SIBLING links, never nested, so the topic stays clickable without an
+ * anchor inside an anchor. Reused by the archive and every topic page.
+ */
+interface Props {
+  posts: CollectionEntry<"blog">[];
+}
+
+const { posts } = Astro.props;
+---
+
+<ul class="index">
+  {
+    posts.map((post) => (
+      <li class="index-row">
+        <a class="index-title" href={`/blog/${post.id}/`}>
+          {post.data.title}
+        </a>
+        <a
+          class="index-topic"
+          href={`/topic/${topicSlug(post.data.topic)}/`}
+        >
+          {post.data.topic}
+        </a>
+        <span class="index-date">
+          <FormattedDate date={post.data.date} style="short" />
+        </span>
+      </li>
+    ))
+  }
+</ul>

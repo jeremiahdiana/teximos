@@ -79,11 +79,12 @@ const year = new Date().getFullYear();
   </head>
 
   <body>
-    <div class="utility">
+    <div class="utility" data-pagefind-ignore>
       <div class="shell">
         <div class="bar">
-          <a class="u-link" href="/subscribe">Subscribe</a>
+          <a class="u-link u-subscribe" href="/subscribe">Subscribe</a>
           <span class="spacer"></span>
+          <a class="u-link" href="/archive">Archive</a>
           <a class="u-link" href="/about">About</a>
           <button
             class="themetoggle"
@@ -132,7 +133,10 @@ const year = new Date().getFullYear();
       })();
     </script>
 
-    <header class:list={["masthead", bare && "masthead-bare"]}>
+    <header
+      class:list={["masthead", bare && "masthead-bare"]}
+      data-pagefind-ignore
+    >
       <a class="wordmark" href="/" aria-label="Teximos, home">
         <Logo size={34} />
         <span>teximos</span>
@@ -143,7 +147,7 @@ const year = new Date().getFullYear();
       <slot />
     </main>
 
-    <footer class="site-footer">
+    <footer class="site-footer" data-pagefind-ignore>
       <div class="shell">
         <div class="bar">
           <span>© {year} Teximos</span>
