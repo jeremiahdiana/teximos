@@ -1,0 +1,92 @@
+---
+title: "Before an AI can spend your money, someone has to sign for it"
+description: "The demos show an agent buying your groceries. The unglamorous problem underneath is how you let a piece of software touch your card, and the answer taking shape at Google, Visa and Mastercard is a signed permission slip for every purchase."
+date: 2026-08-15T16:00:00Z
+topic: "Payments"
+cover: ../../assets/blog/agentic-payments-hero.jpg
+coverAlt: "A hand holding an orange contactless bank card up to a white payment terminal, the contactless wave symbol lit on its screen."
+---
+
+import Pull from "../../components/Pull.astro";
+
+The set piece is familiar by now. You tell an assistant to reorder the coffee,
+book a flight under 300 dollars and keep the fridge stocked, and it goes off and
+does all of it, money included. The demo is the easy part. The question the demo
+skips over is the one the payments industry has spent the last year and a half
+trying to answer, which is how you let a piece of software spend your money at
+all.
+
+The obvious answer, hand the agent your card number, is also the worst one. A
+card number is a bearer token. Whoever holds it can charge it, for anything, up
+to your limit, and the shop on the other end has no way of telling whether a
+person or a program typed it in. That was tolerable while a human was always the
+one clicking buy. It stops being tolerable the moment the thing clicking buy can
+be talked into it by a cleverly worded web page.
+
+<Pull>
+"The rise of autonomous agents and their ability to initiate a payment breaks
+this fundamental assumption."
+</Pull>
+
+That line is from Google, introducing a standard it calls the [Agent Payments
+Protocol](https://cloud.google.com/blog/products/ai-machine-learning/announcing-agents-to-payments-ap2-protocol),
+and the assumption it means is that a human is always the one at the keyboard. A
+whole industry is now unpicking that assumption at once.
+
+## The three questions a card swipe never had to answer
+
+Google's framing is the clearest place to start. It says an agent paying for
+something raises three questions an ordinary checkout never had to. Was it
+authorised, meaning did you actually give this agent permission for this exact
+purchase. Is it authentic, meaning can the shop trust that the agent's request
+reflects what you really wanted. And who is accountable when it goes wrong, which
+it eventually will. A raw card number answers none of these. It just moves money
+and hopes.
+
+## A signed permission slip, not a blank cheque
+
+The protocol's answer is to make the agent carry proof. Before any money moves,
+the user signs what Google calls mandates, small cryptographically signed records
+that are hard to forge and impossible to quietly alter. There are three of them.
+An intent mandate is the instruction, buy white running shoes under 120 dollars,
+and for a task you leave running unattended it carries the rules the agent has to
+stay inside. A cart mandate is the specific basket you approved, the exact items
+at the exact price, so that what you saw is what you are charged. A payment
+mandate tells the bank that an agent was involved at all, which is the piece that
+lets a fraud system weigh the risk and lets everyone work out afterwards who owed
+what. Chained together they leave a trail that can be checked rather than argued
+over.
+
+## The card networks arrived from the other direction
+
+The same idea turned up independently from the incumbents. In the spring of 2025,
+within a day of each other, Mastercard and Visa announced their own versions,
+[Agent Pay](https://www.mastercard.com/news/press/2025/april/mastercard-unveils-agent-pay/)
+and Intelligent Commerce. Both lean on a trick the card industry already uses
+every time you add a card to a phone, called tokenisation, where the real card
+number is swapped for a stand-in that only works in one narrow context.
+Mastercard calls its version an agentic token, and the whole point is that it
+binds that stand-in to one named agent, a limited set of merchants and a consent
+you granted, so the agent can finish a checkout without ever seeing, storing or
+reusing the actual card. Revoke the token and the agent's spending power
+disappears, with no need to cancel the card underneath it.
+
+## Why the boring version is the real one
+
+None of this is the part that gets demoed, and that is the tell.
+
+<Pull>
+The exciting part is the demo. The load-bearing part is the receipt.
+</Pull>
+
+An agent buying shoes is an interface. A scoped, signed, revocable permission for
+each purchase is the thing that decides whether you would ever turn it on. And the
+honest open question is not whether the plumbing works. It is what happens when an
+agent is fooled into signing a mandate it should not have, because a mandate is
+only ever as trustworthy as the judgement of the model that agreed to it. These
+standards make the fraud legible and the liability assignable, which is real
+progress, and is not the same thing as making it not happen. What the industry has
+built is a way to prove exactly what you allowed. What no protocol can sign for is
+whether you should have.
+
+*Photograph: ING Nederland, CC BY-SA 2.0.*

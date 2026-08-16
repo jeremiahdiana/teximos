@@ -24,6 +24,11 @@ export async function getStaticPaths() {
 
 const { post, newer, older } = Astro.props;
 const { Content } = await render(post);
+
+// A rough read time from the raw body, at 200 words a minute. Import lines and
+// JSX in the mdx inflate it slightly, which is close enough for a metabox note.
+const words = post.body ? post.body.trim().split(/\s+/).length : 0;
+const readingTime = Math.max(1, Math.round(words / 200));
 ---
 
 <Post
@@ -37,6 +42,7 @@ const { Content } = await render(post);
   slug={post.id}
   newer={newer}
   older={older}
+  readingTime={readingTime}
 >
   <Content />
 </Post>

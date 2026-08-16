@@ -25,6 +25,8 @@ interface Props {
   /** The next newer and next older pieces, for the foot navigation. */
   newer?: Sibling | null;
   older?: Sibling | null;
+  /** Estimated read time in minutes, shown in the metabox. */
+  readingTime?: number;
 }
 
 const {
@@ -38,6 +40,7 @@ const {
   slug,
   newer,
   older,
+  readingTime,
 } = Astro.props;
 const Hero = getDiagram(diagram) as any;
 ---
@@ -99,6 +102,14 @@ const Hero = getDiagram(diagram) as any;
             <span class="k">Published</span>
             <span class="v"><FormattedDate date={date} /></span>
           </div>
+          {
+            readingTime && (
+              <div class="row">
+                <span class="k">Reading</span>
+                <span class="v">{readingTime} min</span>
+              </div>
+            )
+          }
         </aside>
       </div>
 
