@@ -1,0 +1,93 @@
+---
+title: "The AI frontier spent the summer competing on price, not brains"
+description: "OpenAI and Anthropic both shipped new flagship models in the same July. Neither headline was about a jump in intelligence. Both were about the same intelligence costing less."
+date: 2026-08-20T12:00:00Z
+topic: "Model releases"
+cover: ../../assets/blog/frontier-price-hero.jpg
+coverAlt: "A dense blade of graphics processors wrapped in glycol cooling tubes, the hardware that runs large AI models in a data center."
+---
+
+import Pull from "../../components/Pull.astro";
+
+For most of the last three years the story of the frontier models has been a
+story about capability. Each release was pitched as smarter than the last, and
+the number everyone quoted was a benchmark score. This summer that changed, and
+the change is worth naming, because it says something about where the whole
+industry is heading.
+
+In late July the two leading American labs each shipped a new flagship. Neither
+led with intelligence. Both led with price.
+
+## What each of them actually said
+
+Anthropic released Claude Opus 5 on 24 July. The claim in its own announcement is
+not that it is the smartest model ever made. It is that it "comes close to the
+frontier intelligence of Claude Fable 5 at half the price." On one coding
+benchmark the company reports the new model landing within half a percent of
+Fable 5's peak score while costing half as much per task. The pitch is efficiency.
+You can [read Anthropic's framing here](https://www.anthropic.com/news/claude-opus-5).
+
+OpenAI was even plainer. It titled the launch page for its GPT-5.6 family
+["Advancing the price-performance frontier"](https://openai.com/index/advancing-the-price-performance-frontier-with-gpt-5-6/).
+Not the intelligence frontier. The price-performance frontier. The family comes
+in three tiers with names borrowed from the sky: Sol at the top, Terra in the
+middle, Luna at the cheap end. The whole pitch is more intelligence from every
+token and stronger performance per dollar.
+
+<Pull>
+OpenAI did not call it the intelligence frontier. It called it the
+price-performance frontier. That is the tell.
+</Pull>
+
+Then they cut the prices. On 30 July, days after launch, OpenAI dropped the cost
+of Luna by eighty percent and Terra by twenty. Luna went from one dollar per
+million input tokens to twenty cents. The flagship, Sol, got a promotional rate
+that runs into November. A model does not get eighty percent cheaper because the
+compute got eighty percent cheaper in a week. It gets cheaper because the labs
+are fighting over who is cheapest at a given level of intelligence.
+
+## Why the pitch moved
+
+Two things are happening at once.
+
+The first is that raw capability is getting harder to sell. The jump from a weak
+model to a strong one was obvious to anyone. The jump from a very strong model to
+a slightly stronger one is visible mostly on benchmarks, and benchmarks are a
+poor way to move a customer. When two models are both good enough for the job in
+front of a buyer, the thing that decides between them is not the last half a
+percent of reasoning. It is the invoice.
+
+The second is that the customer changed. The heaviest users of these models are
+no longer people typing into a chat box. They are other pieces of software making
+thousands of calls in a loop. For that kind of user the price per token is not a
+detail, it is the entire business case. Halve it and workloads that were too
+expensive to run suddenly pencil out. That is why both labs are selling the same
+intelligence at a lower number rather than a higher intelligence at the same one.
+
+<Pull>
+When two models are both good enough, the tie is broken by the invoice, not the
+benchmark.
+</Pull>
+
+## What it means
+
+This is what the early stage of commoditisation looks like. It does not mean the
+models stopped improving. It means the improvement that sells has shifted from
+the top of the capability curve to the cost of staying on it. The frontier is
+still moving. It is just that the part of it the labs choose to advertise is the
+price.
+
+For anyone building on top of these models, that is good news in the short run
+and a warning in the long run. Good news, because the same work costs less every
+few months. A warning, because when the underlying model is a cheap and
+interchangeable commodity, the value has to come from somewhere else. It comes
+from what you wrap around the model: the data you feed it, the tools you connect
+it to, the specific problem you solve better than a general chat box can.
+
+The summer's releases were a signal, and it was not subtle. Two of the most
+advanced labs on earth looked at their newest models and decided the most
+compelling thing to say about them was how little they cost to run. Remember that
+the next time a launch is described as a leap. Sometimes the real news is in the
+price list.
+
+*Photograph: Steve Jurvetson, CC BY 4.0.*
