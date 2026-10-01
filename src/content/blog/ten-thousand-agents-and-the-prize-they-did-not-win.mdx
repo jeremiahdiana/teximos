@@ -1,0 +1,126 @@
+---
+title: "Ten thousand agents cracked a famous problem, then the argument started"
+description: "OpenAI says a swarm of its agents resolved one of the six remaining Millennium Prize problems, and published a machine checked proof. The million dollars has not been paid, and the mathematician on the other side of the race says he was asked to drop a colleague's name."
+date: 2026-10-01T12:00:00Z
+topic: "Mathematics"
+cover: ../../assets/blog/vortex-street-hero.jpg
+coverAlt: "A satellite view of the Pacific Ocean south of Yakushima Island in Japan, where the island splits the airflow into a double row of spiralling cloud vortices trailing downwind across dark water."
+---
+
+import Pull from "../../components/Pull.astro";
+
+The picture above is a fluid obeying the Navier-Stokes equations. Air moves past
+an island and the flow breaks into a trailing double row of vortices. The whole
+pattern is described by a handful of lines written down in the 1840s. We use
+those lines to design aircraft, forecast weather and model blood flow. What
+nobody has been able to do, in more than a century and a half of trying, is prove
+that their solutions always stay sensible.
+
+That is the Navier-Stokes existence and smoothness problem, one of the seven
+Millennium Prize problems the Clay Mathematics Institute attached a million
+dollars to in 2000. Six of them are still open. On 8 September, OpenAI published a
+page titled
+["On the Navier-Stokes Millennium Prize Problem"](https://openai.com/index/navier-stokes-solution/)
+and said a system of its agents had resolved one.
+
+## What was actually claimed
+
+The claim is specific, and the specificity matters.
+
+OpenAI says its system produced a proof that an initially smooth fluid, at rest,
+with a smooth external force applied to it, can develop a singularity in finite
+time while its total energy stays bounded throughout. A singularity here means
+the mathematics blows up: some quantity in the solution runs to infinity at a
+point, and the smooth description of the fluid stops existing. The company
+published both a written proof and a formalisation in Lean, a proof assistant
+that mechanically checks every step of an argument against its own foundations.
+
+It also described how the proof was found. Agents were split into groups that
+could talk inside each group, and the group that produced the Navier-Stokes result
+ran on the order of 10,000 concurrent agents, coordinated by an internal model
+the company has not released. Quanta Magazine, which
+[covered the result on the day](https://www.quantamagazine.org/ai-has-solved-one-of-maths-1-million-millennium-prize-problems-20260908/),
+reports that the proof took about 88 hours of that work, that formalising it in
+Lean took a further 17 hours or so and that the agents exchanged close to five
+million messages along the way.
+
+<Pull>
+Lean checked that the argument is valid. Nothing has yet checked that the argument
+answers the question the prize is attached to.
+</Pull>
+
+Those are two different things, and the gap between them is where this story
+lives. A Lean formalisation is strong evidence that a proof contains no logical
+hole. It says nothing about whether the theorem proved is the theorem the Clay
+Institute wrote down. The prize has not been awarded. Independent verification by
+mathematicians who do not work at OpenAI is still running, and until it finishes,
+the honest description of the status is unresolved.
+
+## The race, and the accusation
+
+Twelve hours before OpenAI posted, Tristan Buckmaster at New York University had
+announced results of his own, with Levent Alpöge, a researcher at Anthropic. The
+pair had been working on the problem for the better part of a year, using models
+from both OpenAI and Anthropic, and had arrived at results on the related 3D Euler
+equations plus an unverified blowup proof for an easier version of Navier-Stokes.
+Buckmaster said one of the three papers they released could only be described as
+AI slop, which is a level of candour the rest of this story could use more of.
+
+OpenAI concedes priority on Euler to Buckmaster and Alpöge, and claims
+Navier-Stokes for itself. It also admits that it only went after the problem
+because of rumours that the pair were closing in on it.
+
+Then it gets worse. In
+[Fortune's account](https://fortune.com/2026/09/08/openai-says-it-cracked-navier-stokes-math-grand-challenge-buckmaster-accusation-cheating-intimidation-tao-lament/),
+Buckmaster alleges that the OpenAI researcher Sebastien Bubeck offered him an
+arrangement: Buckmaster could publish and claim the prize, provided he credited
+OpenAI's solution and removed Alpöge's name because of where Alpöge works. When
+Buckmaster declined and said he would go public, he alleges Bubeck asked him why
+he would ruin his career, and told him that if Buckmaster did not want him to be
+nice, he did not have to be nice. Buckmaster has also raised the question of
+whether OpenAI's system saw his own Codex sessions.
+
+Those are allegations, not findings. They are also the part of the episode that
+will still matter in a year, because they are about conduct rather than
+mathematics, and conduct is not something a proof assistant can check.
+
+## What the mathematicians are worried about
+
+Terence Tao, who has worked on this exact problem for years, did not respond with
+a benchmark score. He objected to AI companies treating open mathematical
+problems as marketing proof points, and warned about what happens to a field when
+its unsolved problems are consumed rather than worked through. His phrase for it
+was "the indiscriminate strip-mining of open problems for solutions", and his
+worry was that this may destroy the ecosystem that the next generation of
+techniques, problems and practitioners would otherwise have grown out of.
+
+<Pull>
+A proof is an artifact. A field is a population of people who learned something by
+producing one.
+</Pull>
+
+That is not a complaint about AI being bad at mathematics. It is the opposite. It
+is a complaint about what a field loses when the hard problems get cleared at
+industrial speed by systems that produce an answer without producing anybody who
+understands why it is the answer. The output survives. The apprenticeship that
+used to come attached to it does not.
+
+## Where this leaves things
+
+Three things are true at once, and the coverage has mostly picked one.
+
+A machine checked proof of a finite time singularity in forced Navier-Stokes
+would be a genuine result, and the Lean formalisation is not nothing. It is also
+true that the Clay prize is unclaimed, that the variant proved is not obviously
+the variant the prize describes and that independent verification has not
+finished. And it is true that the first serious collision between a frontier lab
+and the mathematical community over credit happened in the same week, and that
+the lab came out of it looking worse than its model did.
+
+The equations in that satellite photograph have been resisting proof since 1934,
+when Jean Leray showed weak solutions exist without being able to show they stay
+smooth. They may have stopped resisting in September. We will know when the
+people whose job it is to check have finished checking, and not when a launch
+page says so.
+
+*Image: NASA, MODIS Rapid Response System. Public domain.*

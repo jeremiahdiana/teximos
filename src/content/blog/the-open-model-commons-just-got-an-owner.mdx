@@ -1,0 +1,123 @@
+---
+title: "The home of open AI models found a buyer, and it sells the chips"
+description: "Nvidia is paying $12.93 billion for Hugging Face, the registry that 18 million developers pull open models from. Every promise it made about keeping the platform neutral is specific, credible and entirely voluntary."
+date: 2026-10-01T10:00:00Z
+topic: "Acquisitions"
+cover: ../../assets/blog/nvidia-huang-hero.jpg
+coverAlt: "Jensen Huang, the chief executive of Nvidia, mid sentence in front of a press backdrop printed with repeating Nvidia and CES logos."
+---
+
+import Pull from "../../components/Pull.astro";
+import Shot from "../../components/Shot.astro";
+import announcement from "../../assets/blog/nvidia-announcement.jpg";
+
+If you have ever run an AI model that you did not train yourself, you have
+almost certainly pulled it from Hugging Face. It is where open models live. Not
+one company's models, everybody's: Meta's, Google's, Mistral's, Alibaba's,
+thousands of fine tunes by people you have never heard of. For most of a decade it
+has worked the way a public utility works, which is to say nobody thought very
+hard about who owned it.
+
+On 3 September, Nvidia announced it is buying it.
+
+<Shot src={announcement} alt="The Nvidia company blog post titled NVIDIA to Acquire Hugging Face, dated September 3, 2026 and bylined Jensen Huang, above a black banner showing the Nvidia logo, a red heart and the Hugging Face logo." caption="The announcement was posted on the Nvidia blog under Jensen Huang's own byline." wide />
+
+## The numbers
+
+The price is $12,930,300,000, written out to the hundred thousand in Nvidia's own
+[announcement](https://blogs.nvidia.com/blog/nvidia-to-acquire-hugging-face/).
+The deal is contingent on regulatory approval.
+
+What that buys, in the figures Nvidia gives: more than 18 million developers,
+researchers and creators, more than 3 million models, 500,000 datasets, 1 million
+applications and more than 200,000 companies using the platform to discover,
+evaluate, customise and deploy AI.
+
+For scale, Hugging Face's last disclosed private round was a $235 million Series C
+in 2023 led by Salesforce Ventures. TechCrunch
+[reports](https://techcrunch.com/2026/09/03/nvidia-confirms-it-will-buy-hugging-face-for-12-9-billion/)
+that the company turned down a $500 million offer from Nvidia last year. A
+rejected half billion became an accepted thirteen billion in about twelve months,
+which tells you roughly how the market repriced the thing in between.
+
+<Pull>
+A rejected half billion became an accepted thirteen billion in about twelve
+months.
+</Pull>
+
+## The promises
+
+Give Nvidia this much: the commitments in the post are unusually concrete. Jensen
+Huang wrote them himself, and they are not the usual acquisition mush about
+synergies. In order:
+
+- Hugging Face will remain an open platform for the entire AI ecosystem.
+- Developers will choose the models they want, the frameworks they want, the
+  clouds and inference service providers they want and the computing platforms
+  they want.
+- "NVIDIA compute will not be required to build on or deploy through Hugging
+  Face."
+- The platform will keep supporting open source and open weight models from every
+  model builder and keep supporting multi-cloud and multi-accelerator
+  development and deployment.
+
+Nvidia also points out, fairly, that it is already the largest contributor of
+open models and data to the platform: more than 500 models and more than 250 open
+datasets. This is not a company that discovered open weights the week it wrote a
+cheque.
+
+Clem Delangue, Hugging Face's chief executive, framed it as a resourcing problem.
+His account is that the open platform needed more compute, more support and more
+visibility to work at the scale it now has to work at, and that this is why the
+company went to talk to Jensen in the first place.
+
+## The part that is not a mechanism
+
+Here is the thing to hold on to. Every commitment above is a promise made by an
+owner. Not one of them is a structure that would survive the owner changing its
+mind.
+
+<Pull>
+"NVIDIA compute will not be required to build on or deploy through Hugging Face."
+That sentence is the entire deal. It is a promise, not a mechanism.
+</Pull>
+
+There is no independent foundation holding the registry. No trust, no golden
+share, no charter that a future chief executive would have to go to court to
+unwind. The guarantee that the world's model registry stays neutral toward
+hardware is, as of September, a paragraph on a corporate blog signed by a man who
+sells the hardware.
+
+That is not an accusation of bad faith. Huang's stated reasoning is coherent and
+he has been making the open weights argument in public for a while, including in a
+recent open letter he coauthored. It is a point about where a dependency now
+sits. Before September, if Nvidia had wanted to make life quietly harder for
+people deploying on AMD or on Google's accelerators, it had no particular lever at
+the registry layer. After September, it owns the registry layer. The promise is
+that it will not pull the lever. The lever still exists.
+
+## What to actually watch
+
+Press releases are not evidence. Behaviour over years is. Three things are worth
+checking against the promise as this closes and settles:
+
+**Does model discovery stay hardware neutral?** The ranking, the search, the
+trending list and the default deployment buttons are the places where a thumb
+would be invisible on the scale. Nobody would announce a change there.
+
+**Do rival vendors keep first class support?** AMD, Google, Apple, Qualcomm and
+the inference providers all publish to Hugging Face today. Watch whether their
+integrations stay as good as Nvidia's, or merely stay possible.
+
+**Does it stay cheap to leave?** The strongest guarantee of neutrality is not a
+promise, it is a working export path. Weights are files. The healthiest outcome
+for the open ecosystem is that mirrors and alternative registries get more
+investment, not less, precisely because the main one now has a corporate parent.
+
+Open models were supposed to be the hedge against a small number of companies
+owning AI. That hedge has been running, for years, through infrastructure owned by
+nobody in particular. From September it runs through infrastructure owned by the
+most valuable chipmaker on earth. The models are still open. The commons is now
+somebody's property.
+
+*Photograph: Maurizio Pesce, CC BY 2.0. Screenshot: NVIDIA.*
