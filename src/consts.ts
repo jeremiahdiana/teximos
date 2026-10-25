@@ -1,19 +1,15 @@
 export const SITE_TITLE = "Teximos";
 export const SITE_DESCRIPTION =
-  "A publication about technology: what just shipped, what it actually does and what it costs when it breaks.";
+  "Technology news, explained properly. What shipped, what it means and who it affects.";
 export const SITE_URL = "https://teximos.com";
 
 // The line under the wordmark on the index. States what the publication is
 // about rather than who writes it.
-//
-// Deliberately wider than the first version, which described only the
-// production incident write-ups and read as a bug diary. The remit is the
-// industry: releases, product decisions, opinion and the engineering.
 export const SITE_STATEMENT =
-  "A publication about technology and the people shipping it. What just changed, what it actually does and what it costs when it breaks.";
+  "Technology news, explained properly. What shipped, what it means and who it affects.";
 
 export const SITE_BLURB =
-  "Model releases, product decisions, opinions with the reasoning left in and real incidents with the code attached. Written so that anyone who works near software can read it, not only the people who wrote it.";
+  "AI, chips, space, security and policy, each story checked against the primary source and written so anyone can follow it.";
 
 // Email newsletter. Buttondown's embed is a plain form POST, so signup adds
 // real subscribers with zero JavaScript. Swap `user` for the real account and

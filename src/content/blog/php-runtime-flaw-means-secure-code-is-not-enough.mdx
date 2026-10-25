@@ -1,0 +1,73 @@
+---
+title: "Two critical PHP flaws sit in the runtime, so your own code being clean does not protect you"
+description: "CVE-2026-109618 and CVE-2026-109619 allow unauthenticated code execution on any server serving PHP. The fix is a version bump, not a code change, and CISA says to patch now or take the server offline."
+date: 2026-10-23T08:00:00Z
+topic: "Security"
+cover: ../../assets/blog/php-patch-hero.jpg
+coverAlt: "Rows of server machines on metal racks in a data centre, lit by blue strip lights along the front of each shelf."
+---
+
+import Pull from "../../components/Pull.astro";
+
+Most security advice assumes the risk lives in your application. You validate input,
+you parameterise queries, you keep dependencies current. The two PHP flaws disclosed on
+21 October 2026 are different, because they sit one layer below all of that. They are
+in PHP itself, the runtime that executes the code, and the code running on top of it
+does not matter.
+
+The two identifiers are CVE-2026-109618 and CVE-2026-109619. The security press rates
+both at 9.2 on the CVSS v4.0 scale. They allow unauthenticated remote code execution,
+which means an attacker with no account on the site can run commands on the server.
+
+## Why it is not a code problem
+
+A flaw in the runtime is the worst kind to have, because the usual defences sit above
+it. A perfectly written application still runs on the runtime, so the runtime's bug is
+the attacker's way in. The code being clean is not a mitigation.
+
+CISA's alert puts it in the most direct terms available. The agency says it "strongly
+urges organizations to immediately patch" the two flaws, and it applies to "all PHP
+installations serving web requests."
+
+## What is affected
+
+The highest risk is on servers running Apache with the mod_php module, which CISA
+and PHP both single out. CISA also names PHP-FPM, php-cgi, FrankenPHP and LiteSpeed as
+configurations that are in scope. If a server runs PHP to answer web requests, it
+should be treated as in scope until someone has checked.
+
+The fixed versions are PHP 8.5.12, 8.4.27, 8.3.36 and 8.2.35. CISA's guidance for
+systems that cannot be updated straight away, including anything still on PHP 8.1 or
+earlier, is to take them offline until they are patched or upgraded.
+
+<Pull>
+Patching the runtime is the whole fix. Nothing in your application needs to change for
+the flaw to close.
+</Pull>
+
+## What we do not yet know
+
+The exploitation picture is not settled, and it would be wrong to say otherwise. Some
+reports describe early exploit attempts. The watchTowr team, which reproduced one of the
+flaws, reported no exploitation in the wild as of the morning of the disclosure. The
+two accounts are a few hours apart and do not contradict each other, but they do not
+settle the question either.
+
+The sensible reading is that the flaws are serious, fixes exist, and the window in
+which an attacker can act is open now. Whether anyone has already used them is a
+question the next few weeks of logs will answer.
+
+## What to do
+
+Check the PHP version on every server that serves web requests, not only the production
+one. Move to one of the fixed versions, or confirm that the operating system package or
+hosting provider has shipped the patch and that the running version actually reflects
+it. A package manager can report one version while a long-lived process still runs the
+old one, so restart the web server or PHP-FPM after updating.
+
+If a server cannot be updated today, CISA's advice is to take it offline. That is
+uncomfortable for a live site, but a server that answers web requests while running an
+unpatched runtime with a known remote code execution flaw is a bigger problem than the
+downtime.
+
+*Photograph: BalticServers.com, Wikimedia Commons, CC BY-SA 3.0. A data centre server room.*
