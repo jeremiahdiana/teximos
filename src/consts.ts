@@ -11,15 +11,10 @@ export const SITE_STATEMENT =
 export const SITE_BLURB =
   "AI, chips, space, security and policy, each story checked against the primary source and written so anyone can follow it.";
 
-// Email newsletter. Buttondown's embed is a plain form POST, so signup adds
-// real subscribers with zero JavaScript. Swap `user` for the real account and
-// both the /subscribe page and the homepage block pick it up.
-export const NEWSLETTER = {
-  user: "teximos",
-  get action() {
-    return `https://buttondown.email/api/emails/embed-subscribe/${this.user}`;
-  },
-};
+// Used by the Privacy and Terms pages. Corrections, legal notices and takedown
+// requests all come to this address.
+export const CONTACT_EMAIL = "hello@teximos.com";
+export const LEGAL_UPDATED = "25 October 2026";
 
 export const AUTHOR = {
   name: "Jeremiah Diana",

@@ -3,7 +3,7 @@ import { getCollection } from "astro:content";
 import Base from "../layouts/Base.astro";
 import FormattedDate from "../components/FormattedDate.astro";
 import Preview from "../components/Preview.astro";
-import { SITE_STATEMENT, SITE_BLURB, NEWSLETTER } from "../consts";
+import { SITE_STATEMENT, SITE_BLURB } from "../consts";
 
 const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
@@ -22,7 +22,7 @@ const row = rest.slice(3);
 // reasoning for that choice lives there.
 ---
 
-<Base>
+<Base display>
   <section class="statement">
     <div class="shell">
       <span class="kicker">Teximos</span>
@@ -126,29 +126,11 @@ const row = rest.slice(3);
           </p>
         </div>
         <div class="feed">
-          <span class="kicker">Subscribe</span>
+          <span class="kicker">Follow</span>
           <p class="feed-note">
-            Each new piece by email. Nothing else, and one link unsubscribes.
+            Every piece, in any RSS reader. No email required.
           </p>
-          <form
-            class="subscribe-form"
-            action={NEWSLETTER.action}
-            method="post"
-            target="_blank"
-          >
-            <input type="hidden" name="embed" value="1" />
-            <input
-              type="email"
-              name="email"
-              inputmode="email"
-              autocomplete="email"
-              placeholder="you@example.com"
-              aria-label="Email address"
-              required
-            />
-            <button type="submit">Subscribe</button>
-          </form>
-          <a class="feed-rss" href="/rss.xml">Or follow the RSS feed</a>
+          <a class="feed-rss" href="/rss.xml">teximos.com/rss.xml</a>
         </div>
       </div>
     </div>

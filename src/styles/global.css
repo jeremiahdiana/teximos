@@ -180,6 +180,100 @@ a:hover {
   padding-bottom: 2rem;
 }
 
+/*
+ * The homepage nameplate. A large wordmark with a hairline above it, and a
+ * 2px rule along the bottom drawn as a pseudo element so it can animate. The
+ * finished state is the default, so it is what a reduced motion reader and a
+ * no-JS reader both see. Nothing here runs script.
+ */
+.masthead-display {
+  position: relative;
+  flex-direction: column;
+  align-items: center;
+  padding: 3.25rem 1.5rem 3rem;
+  border-bottom: 0;
+}
+
+.masthead-display::before {
+  content: "";
+  width: min(40rem, 100%);
+  border-top: 1px solid var(--rule);
+  margin-bottom: 2rem;
+}
+
+.masthead-display::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--fg);
+}
+
+.masthead-display .wordmark {
+  gap: 0.14em;
+  font-size: clamp(3.5rem, 11vw, 7.5rem);
+  letter-spacing: -0.035em;
+}
+
+.masthead-display .wordmark svg {
+  width: 0.85em;
+  height: 0.85em;
+  flex: none;
+}
+
+.masthead-display .ltr {
+  display: inline-block;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .masthead-display .wordmark svg {
+    animation: mark-in 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  .masthead-display .ltr {
+    animation: letter-in 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation-delay: calc(0.15s + var(--i) * 0.045s);
+  }
+
+  .masthead-display::after {
+    transform-origin: center;
+    animation: rule-draw 0.9s cubic-bezier(0.6, 0, 0.2, 1) 0.9s both;
+  }
+}
+
+@keyframes mark-in {
+  from {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes letter-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.35em);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes rule-draw {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
 .wordmark {
   display: flex;
   align-items: center;
@@ -768,73 +862,12 @@ a:hover {
   flex: none;
 }
 
-/* ---------- subscribe form ---------- */
-
-.subscribe-form {
-  display: flex;
-  gap: 0.5rem;
-  max-width: var(--measure);
-  margin: 1.5rem 0 0;
-}
-
-.subscribe-form input[type="email"] {
-  flex: 1 1 auto;
-  min-width: 0;
-  font: inherit;
-  font-size: 1rem;
-  color: var(--fg);
-  background: var(--bg);
-  border: 1px solid var(--rule);
-  border-radius: 0;
-  padding: 0.7rem 0.85rem;
-}
-
-.subscribe-form input[type="email"]::placeholder {
-  color: var(--muted);
-}
-
-.subscribe-form input[type="email"]:focus {
-  outline: none;
-  border-color: var(--fg);
-}
-
-.subscribe-form button {
-  flex: none;
-  font-family: var(--mono);
-  font-size: 0.8125rem;
-  letter-spacing: 0.02em;
-  color: var(--bg);
-  background: var(--fg);
-  border: 1px solid var(--fg);
-  border-radius: 0;
-  padding: 0 1.25rem;
-  cursor: pointer;
-}
-
-.subscribe-form button:hover {
-  opacity: 0.85;
-}
-
-@media (max-width: 32rem) {
-  .subscribe-form {
-    flex-direction: column;
-  }
-  .subscribe-form button {
-    padding: 0.7rem 1.25rem;
-  }
-}
-
-/* the compact variant in the homepage colophon */
+/* the feed link in the homepage colophon */
 .colophon .feed-note {
   margin: 0.5rem 0 0;
   font-size: 0.6875rem;
   line-height: 1.7;
   color: var(--muted);
-  max-width: none;
-}
-
-.colophon .feed .subscribe-form {
-  margin: 0.9rem 0 0;
   max-width: none;
 }
 
@@ -1241,10 +1274,10 @@ a:hover {
 @media (max-width: 26rem) {
   /*
    * At the narrowest widths the utility bar is Archive, About and the theme
-   * control. Subscribe drops out here only, since it still lives in the footer
+   * control. RSS drops out here only, since it still lives in the footer
    * and the homepage colophon.
    */
-  .u-subscribe {
+  .u-rss {
     display: none;
   }
 }

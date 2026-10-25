@@ -12,6 +12,8 @@ interface Props {
   description?: string;
   /** Articles run their own hero, so the masthead drops its bottom rule. */
   bare?: boolean;
+  /** The homepage nameplate: a large wordmark that settles in once on load. */
+  display?: boolean;
   /** og:type. "article" on a piece, "website" everywhere else. */
   type?: string;
   /** Social card, relative to the site root. Falls back to the house card. */
@@ -22,6 +24,7 @@ const {
   title,
   description = SITE_DESCRIPTION,
   bare = false,
+  display = false,
   type = "website",
   image = "/og/default.png",
 } = Astro.props;
@@ -82,7 +85,7 @@ const year = new Date().getFullYear();
     <div class="utility" data-pagefind-ignore>
       <div class="shell">
         <div class="bar">
-          <a class="u-link u-subscribe" href="/subscribe">Subscribe</a>
+          <a class="u-link u-rss" href="/rss.xml">RSS</a>
           <span class="spacer"></span>
           <a class="u-link" href="/archive">Archive</a>
           <a class="u-link" href="/about">About</a>
@@ -134,12 +137,22 @@ const year = new Date().getFullYear();
     </script>
 
     <header
-      class:list={["masthead", bare && "masthead-bare"]}
+      class:list={["masthead", bare && "masthead-bare", display && "masthead-display"]}
       data-pagefind-ignore
     >
       <a class="wordmark" href="/" aria-label="Teximos, home">
         <Logo size={34} />
-        <span>teximos</span>
+        {
+          display ? (
+            <span class="wordmark-letters" aria-hidden="true">
+              {[..."teximos"].map((ch, i) => (
+                <span class="ltr" style={`--i:${i}`}>{ch}</span>
+              ))}
+            </span>
+          ) : (
+            <span>teximos</span>
+          )
+        }
       </a>
     </header>
 
@@ -153,6 +166,8 @@ const year = new Date().getFullYear();
           <span>© {year} Teximos</span>
           <span class="spacer"></span>
           <a href="/about">About</a>
+          <a href="/privacy">Privacy</a>
+          <a href="/terms">Terms</a>
           <a href="/rss.xml">RSS</a>
         </div>
       </div>

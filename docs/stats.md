@@ -67,13 +67,6 @@ Setup, once:
 4. Submit the sitemap: `https://teximos.com/sitemap-index.xml`.
 5. Use **URL Inspection** on the homepage and request indexing.
 
-## 4. Buttondown (after the newsletter is wired)
-
-Once the subscribe form points at the real Buttondown account, the Buttondown
-dashboard shows subscriber count over time, plus open rates on each email you
-send. That is the cleanest signal that the writing is landing, because a
-subscribe is a stronger vote than a page view.
-
 ## Quick reference
 
 | Signal | Where | Setup | Tells you |
@@ -81,4 +74,3 @@ subscribe is a stronger vote than a page view.
 | Requests | Cloudflare Analytics and Logs | none | rough traffic, bot inflated |
 | Page views, top pages, referrers | Cloudflare Web Analytics | 2 min, no code | real readership |
 | Search queries, clicks, position | Google Search Console | one time, DNS | what search finds you for |
-| Subscribers, open rate | Buttondown | after newsletter wired | who wants the next piece |

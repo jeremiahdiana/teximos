@@ -82,9 +82,11 @@ for (const t of targets) {
     expression: "try{localStorage.clear()}catch(e){}",
   });
   await send("Page.reload", {});
-  await new Promise((r) => setTimeout(r, 1100));
+  // The homepage nameplate animates in for about 1.8s, so wait it out. Other
+  // pages have no animation and keep the short wait.
+  await new Promise((r) => setTimeout(r, t.url === "/" ? 2200 : 1100));
 
-  // Drop the utility bar. Subscribe, About and a theme switch are navigation,
+  // Drop the utility bar. RSS, About and a theme switch are navigation,
   // and on somebody else's timeline they are noise around the one thing the
   // card is for. Removing it also hands 44px back to the figure.
   await send("Runtime.evaluate", {

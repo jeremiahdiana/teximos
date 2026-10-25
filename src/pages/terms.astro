@@ -1,0 +1,100 @@
+---
+import Base from "../layouts/Base.astro";
+import { AUTHOR, CONTACT_EMAIL, LEGAL_UPDATED } from "../consts";
+---
+
+<Base title="Terms" description="The terms for reading Teximos and using its pages and feed.">
+  <div class="page">
+    <div class="shell">
+      <span class="kicker">Terms</span>
+      <h1>Terms of use</h1>
+
+      <div class="prose column">
+        <p>
+          These terms apply to teximos.com and its feed. By reading the site or
+          using it, you agree to them. They were last updated on {LEGAL_UPDATED}.
+        </p>
+
+        <h2>What Teximos is</h2>
+        <p>
+          Teximos is an independent publication about technology. It reports on
+          and explains news, releases, research and policy, and it gives opinion
+          where a piece says it is opinion. Nothing on the site is legal, security,
+          financial, medical or other professional advice. Before you act on
+          anything you read here, check it against the primary source and take
+          your own advice.
+        </p>
+
+        <h2>Ownership of the text</h2>
+        <p>
+          The written pieces on Teximos are copyright {AUTHOR.name}. You may quote
+          a passage with a credit and a link back to the piece. You may not
+          republish a whole piece, or make it available for others to copy,
+          without written permission.
+        </p>
+
+        <h2>Images and third party material</h2>
+        <p>
+          Images, quotations and figures belong to their owners. Where a piece
+          uses material that is in the public domain, from a Creative Commons
+          licence or from another source, the piece credits it. Those credits
+          are part of the licence and must be kept if you reuse the image.
+        </p>
+
+        <h2>Accuracy and corrections</h2>
+        <p>
+          Each piece is written from primary sources where they could be reached,
+          and the piece says where they could not. The site is provided as it is,
+          and mistakes happen. If something is wrong, write to
+          <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>. Corrections are
+          made in place and the change is noted.
+        </p>
+
+        <h2>Links</h2>
+        <p>
+          Teximos links to other sites for reference. We do not control those
+          sites and are not responsible for their content. A link is not an
+          endorsement.
+        </p>
+
+        <h2>No warranty</h2>
+        <p>
+          The site and its feed are provided without warranty of any kind, express
+          or implied. We do not promise that the site will always be available,
+          error free or suitable for any particular purpose.
+        </p>
+
+        <h2>Limit of liability</h2>
+        <p>
+          To the fullest extent the law allows, Teximos and its author are not
+          liable for any loss or damage arising from reading the site or relying on
+          what it says.
+        </p>
+
+        <h2>Takedown and legal notices</h2>
+        <p>
+          If you own material on the site and believe it is used wrongly, or if
+          you have a legal notice to send, write to
+          <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>. Include the
+          address of the page and enough detail for us to find the material. We
+          will respond and act in good faith.
+        </p>
+
+        <h2>Changes to these terms</h2>
+        <p>
+          These terms can change. When they do, the date at the top changes too,
+          and the new terms apply from that date.
+        </p>
+
+        <h2>Governing law</h2>
+        <p>
+          These terms are governed by the laws of the State of California, USA,
+          without regard to its conflict of laws rules. Disputes are to be brought
+          in the courts of California.
+        </p>
+
+      </div>
+    </div>
+  </div>
+</Base>
+</content>
